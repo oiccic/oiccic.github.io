@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="Calcolatori">
+    <meta name="theme-color" content="#1c1c1e">
+    <link rel="manifest" href="manifest.json">
+    <link rel="apple-touch-icon" href="apple-touch-icon.png">
+    <title>Calcolatori Business</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background: #000;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 30px 20px;
+        }
+        .logo {
+            width: 96px;
+            height: 96px;
+            border-radius: 22px;
+            margin-bottom: 16px;
+        }
+        h1 {
+            font-size: 26px;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 6px;
+            text-align: center;
+        }
+        .subtitle {
+            font-size: 14px;
+            color: #636366;
+            margin-bottom: 48px;
+            text-align: center;
+        }
+        .card-list {
+            width: 100%;
+            max-width: 400px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+        .card {
+            display: flex;
+            align-items: center;
+            background: #1c1c1e;
+            border-radius: 20px;
+            padding: 22px 24px;
+            text-decoration: none;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+            transition: transform 0.15s ease, box-shadow 0.15s ease;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .card:active {
+            transform: scale(0.97);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.07);
+        }
+        .card-icon {
+            width: 54px;
+            height: 54px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 26px;
+            flex-shrink: 0;
+            margin-right: 18px;
+        }
+        .card-icon.blue   { background: #e3f0ff; }
+        .card-icon.green  { background: #e3f9ec; }
+        .card-text { flex: 1; }
+        .card-title {
+            font-size: 17px;
+            font-weight: 600;
+            color: #fff;
+            margin-bottom: 3px;
+        }
+        .card-desc {
+            font-size: 13px;
+            color: #636366;
+            line-height: 1.4;
+        }
+        .card-arrow {
+            font-size: 18px;
+            color: #48484a;
+            margin-left: 10px;
+        }
+        .footer {
+            margin-top: 48px;
+            font-size: 12px;
+            color: #48484a;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <img src="apple-touch-icon.png" class="logo" alt="Logo">
+    <h1>Calcolatori Business</h1>
+    <p class="subtitle">Scegli il calcolatore</p>
+
+    <div class="card-list">
+        <a href="margin-ITA.html" class="card">
+            <div class="card-icon blue">📊</div>
+            <div class="card-text">
+                <div class="card-title">Calcolatore Margini</div>
+                <div class="card-desc">Costo · Prezzo · Margine %</div>
+            </div>
+            <span class="card-arrow">›</span>
+        </a>
+
+        <a href="discount-ITA.html" class="card">
+            <div class="card-icon green">🏷️</div>
+            <div class="card-text">
+                <div class="card-title">Calcolatore Sconti</div>
+                <div class="card-desc">Lordo · Sconto · Netto</div>
+            </div>
+            <span class="card-arrow">›</span>
+        </a>
+    </div>
+
+    <p class="footer">Tocca una voce per aprire il calcolatore</p>
+</body>
+</html>

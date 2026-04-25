@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Sconti">
+    <meta name="theme-color" content="#1c1c1e">
+    <link rel="manifest" href="manifest.json">
+    <link rel="apple-touch-icon" href="apple-touch-icon.png">
+    <title>Calcolatore Sconti</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background: #000;
+            display: flex; justify-content: center;
+            padding: 20px; min-height: 100vh;
+        }
+        .container {
+            width: 100%; max-width: 500px;
+            background: #1c1c1e; padding: 28px 20px;
+            border-radius: 24px; box-shadow: 0 10px 40px rgba(0,0,0,0.6);
+            align-self: flex-start;
+        }
+        h1 { font-size: 24px; font-weight: 700; margin-bottom: 4px; text-align: center; color: #fff; }
+        .formula-hint { text-align: center; font-size: 12px; color: #48484a; margin-bottom: 20px; }
+        .status-bar {
+            text-align: center; font-size: 13px; font-weight: 500;
+            color: #636366; margin-bottom: 20px; min-height: 18px; transition: color 0.3s;
+        }
+        .status-bar.active { color: #30d158; }
+
+        .input-group { margin-bottom: 16px; }
+        .label-row { display: flex; align-items: center; margin-bottom: 7px; margin-left: 2px; }
+        label { font-size: 12px; font-weight: 600; color: #636366; text-transform: uppercase; letter-spacing: 0.6px; }
+
+        /* gap: 8px ≈ 3mm */
+        .input-wrap { display: flex; align-items: center; gap: 8px; }
+
+        input {
+            flex: 1; padding: 14px;
+            border: 1.5px solid #38383a; border-radius: 13px;
+            font-size: 20px; outline: none;
+            background: #2c2c2e; color: #fff;
+            min-width: 0; text-align: right; font-variant-numeric: tabular-nums;
+            transition: border-color 0.2s, background-color 0.2s;
+            -webkit-appearance: none;
+        }
+        input::placeholder { color: #48484a; }
+        input:focus      { border-color: #0a84ff; }
+        input.output     { border-color: #0a84ff; background: #0d1f38; color: #0a84ff; font-weight: 700; }
+        input.flash      { background: #0d2a18 !important; border-color: #30d158 !important; transition: none; }
+        input.accepted   { border-color: #30d158; background: #0d2a18; }
+        input.disabled-alt { background: #1c1c1e; color: #3a3a3c; border-color: #2c2c2e; }
+
+        .stepper { display: flex; flex-direction: column; gap: 3px; flex-shrink: 0; }
+        .step-btn {
+            width: 38px; height: 26px;
+            border: 1.5px solid #38383a; border-radius: 8px;
+            background: #2c2c2e; cursor: pointer;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 16px; color: #ebebf5; font-weight: 500;
+            transition: all 0.15s; -webkit-tap-highlight-color: transparent; user-select: none;
+        }
+        .step-btn:active { background: #3a3a3c; transform: scale(0.93); }
+
+        .sconto-block { margin-bottom: 16px; }
+        .or-row { display: flex; align-items: center; gap: 12px; margin: 10px 0; }
+        .or-row::before, .or-row::after { content: ''; flex: 1; height: 1px; background: #38383a; }
+        .or-label { font-size: 12px; font-weight: 700; color: #48484a; letter-spacing: 1px; }
+
+        .divider { height: 1px; background: #2c2c2e; margin: 6px 0 18px; }
+
+        .btn {
+            width: 100%; background: #0a84ff; color: white; border: none;
+            padding: 17px; border-radius: 15px; font-size: 17px; font-weight: 600;
+            cursor: pointer; margin-top: 10px; transition: all 0.15s;
+        }
+        .btn:active  { background: #0060c0; transform: scale(0.98); }
+        .btn:disabled { background: #2c2c2e; color: #48484a; cursor: not-allowed; transform: none; }
+        .btn.ready   { box-shadow: 0 0 0 3px rgba(10,132,255,0.35); }
+        .btn-secondary {
+            width: 100%; background: transparent; color: #ff453a; border: none;
+            padding: 14px; border-radius: 15px; font-size: 15px; font-weight: 500;
+            cursor: pointer; margin-top: 4px;
+        }
+        .hint { font-size: 13px; color: #48484a; text-align: center; margin-top: 14px; line-height: 1.6; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>Calcolatore Sconti</h1>
+    <div class="formula-hint">Lordo − Sconto = Netto</div>
+    <div class="status-bar" id="statusBar">Inserisci due valori e premi Calcola</div>
+
+    <!-- LORDO -->
+    <div class="input-group">
+        <div class="label-row"><label>Prezzo Lordo (€)</label></div>
+        <div class="input-wrap">
+            <input type="text" inputmode="decimal" id="lordo" placeholder="0,00">
+            <div class="stepper">
+                <button class="step-btn" tabindex="-1" onclick="step('lordo',+1)">＋</button>
+                <button class="step-btn" tabindex="-1" onclick="step('lordo',-1)">－</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- SCONTO € e % verticali -->
+    <div class="sconto-block">
+        <div class="input-group" style="margin-bottom:0">
+            <div class="label-row"><label>Sconto (€)</label></div>
+            <div class="input-wrap">
+                <input type="text" inputmode="decimal" id="sconto_e" placeholder="0,00">
+                <div class="stepper">
+                    <button class="step-btn" tabindex="-1" onclick="step('sconto_e',+1)">＋</button>
+                    <button class="step-btn" tabindex="-1" onclick="step('sconto_e',-1)">－</button>
+                </div>
+            </div>
+        </div>
+        <div class="or-row"><span class="or-label">O</span></div>
+        <div class="input-group" style="margin-bottom:0">
+            <div class="label-row"><label>Sconto (%)</label></div>
+            <div class="input-wrap">
+                <input type="text" inputmode="decimal" id="sconto_p" placeholder="0,00">
+                <div class="stepper">
+                    <button class="step-btn" tabindex="-1" onclick="step('sconto_p',+1)">＋</button>
+                    <button class="step-btn" tabindex="-1" onclick="step('sconto_p',-1)">－</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="divider" style="margin-top:18px"></div>
+
+    <!-- NETTO -->
+    <div class="input-group">
+        <div class="label-row"><label>Prezzo Netto (€)</label></div>
+        <div class="input-wrap">
+            <input type="text" inputmode="decimal" id="netto" placeholder="0,00">
+            <div class="stepper">
+                <button class="step-btn" tabindex="-1" onclick="step('netto',+1)">＋</button>
+                <button class="step-btn" tabindex="-1" onclick="step('netto',-1)">－</button>
+            </div>
+        </div>
+    </div>
+
+    <button class="btn" id="btnCalcola" onclick="calcola()" disabled>Calcola</button>
+    <button class="btn-secondary" tabindex="-1" onclick="resetCampi()">Azzera tutto</button>
+    <div class="hint" id="hint" style="display:none">Modifica qualsiasi valore — gli altri si aggiornano in tempo reale</div>
+</div>
+
+<script>
+let fase2=false, inputGruppi=[], activeSconto=null;
+const NAV_IDS=['lordo','sconto_e','sconto_p','netto'];
+const GRUPPI=['lordo','sconto','netto'];
+const btn=document.getElementById('btnCalcola');
+const f=id=>document.getElementById(id);
+const toG=id=>(id==='sconto_e'||id==='sconto_p')?'sconto':id;
+
+function pIT(str){
+    if(!str||!str.trim()) return NaN;
+    let s=str.trim();
+    if(s.includes('.')&&s.includes(',')) s=s.replace(/\./g,'').replace(',','.');
+    else if(s.includes(',')) s=s.replace(',','.');
+    return parseFloat(s);
+}
+function fIT(num,dec=2){
+    if(isNaN(num)) return '';
+    return num.toLocaleString('it-IT',{minimumFractionDigits:dec,maximumFractionDigits:dec});
+}
+function sf(id,n){f(id).value=fIT(n);}
+function v(id){return pIT(f(id).value);}
+function ok(id){return!isNaN(v(id));}
+
+function getStep(id,val){
+    if(id==='sconto_p') return 0.5;
+    const a=Math.abs(val);
+    if(a<=20) return 0.10; if(a<=100) return 1; if(a<=30000) return 1000; return 10000;
+}
+function rts(val,s){return Math.round(val*(1/s))/(1/s);}
+
+function calcTutti(kn){
+    let{lordo:L,sconto_e:S,sconto_p:P,netto:N}=kn;
+    const h=x=>x!==undefined&&!isNaN(x);
+    if(h(L)&&h(S)){N=L-S;P=S/L*100;}
+    else if(h(L)&&h(P)){S=L*P/100;N=L-S;}
+    else if(h(L)&&h(N)){S=L-N;P=S/L*100;}
+    else if(h(N)&&h(S)){L=N+S;P=S/L*100;}
+    else if(h(N)&&h(P)){L=N/(1-P/100);S=L*P/100;}
+    else return null;
+    if(L<0||S<0||P<0||P>=100||N<0) return null;
+    return{lordo:L,sconto_e:S,sconto_p:P,netto:N};
+}
+
+function scriviG(g,res,fl){
+    if(g==='lordo'){sf('lordo',res.lordo);if(fl)flash('lordo');}
+    if(g==='netto'){sf('netto',res.netto);if(fl)flash('netto');}
+    if(g==='sconto'){sf('sconto_e',res.sconto_e);if(fl)flash('sconto_e');sf('sconto_p',res.sconto_p);if(fl)flash('sconto_p');}
+}
+
+function readG(g){
+    if(g==='lordo'){const x=v('lordo');return isNaN(x)?null:{lordo:x};}
+    if(g==='netto'){const x=v('netto');return isNaN(x)?null:{netto:x};}
+    if(g==='sconto'){const xe=v('sconto_e');if(!isNaN(xe)) return{sconto_e:xe};const xp=v('sconto_p');if(!isNaN(xp)) return{sconto_p:xp};return null;}
+}
+
+function updBtn(){
+    if(fase2) return;
+    const n=[ok('lordo'),ok('netto'),ok('sconto_e')||ok('sconto_p')].filter(Boolean).length;
+    btn.disabled=n<2;btn.classList.toggle('ready',n>=2);
+}
+
+function onScontoInput(tipo){
+    const qId=tipo==='e'?'sconto_e':'sconto_p', aId=tipo==='e'?'sconto_p':'sconto_e';
+    if(!fase2){
+        if(ok(qId)){activeSconto=tipo;f(aId).classList.add('disabled-alt');f(aId).value='';}
+        else{activeSconto=null;f(aId).classList.remove('disabled-alt');}
+        updBtn();
+    } else ricalcola(qId);
+}
+
+function accept(id){
+    const x=v(id);
+    if(!isNaN(x)){sf(id,x);f(id).classList.add('accepted');setTimeout(()=>f(id).classList.remove('accepted'),600);}
+    updBtn();
+}
+
+function goTo(idx){
+    const id=NAV_IDS[((idx%NAV_IDS.length)+NAV_IDS.length)%NAV_IDS.length];
+    if(f(id).classList.contains('disabled-alt')){goTo(idx+1);return;}
+    f(id).focus();f(id).select();
+}
+
+NAV_IDS.forEach((id,idx)=>{
+    f(id).addEventListener('blur',()=>{const x=v(id);if(!isNaN(x))sf(id,x);updBtn();});
+    f(id).addEventListener('input',()=>{
+        if(id==='sconto_e') onScontoInput('e');
+        else if(id==='sconto_p') onScontoInput('p');
+        else{if(!fase2) updBtn(); else ricalcola(id);}
+    });
+    f(id).addEventListener('keydown',e=>{
+        if(e.key==='Enter'){
+            e.preventDefault();accept(id);
+            if(!fase2){if(!btn.disabled){calcola();return;}const pv=NAV_IDS.findIndex((fid,fi)=>fi>idx&&!ok(fid)&&!f(fid).classList.contains('disabled-alt'));goTo(pv!==-1?pv:idx+1);}
+            else goTo(idx+1);
+        }
+        else if(e.key==='ArrowDown'){e.preventDefault();accept(id);goTo(idx+1);}
+        else if(e.key==='ArrowUp'){e.preventDefault();accept(id);goTo(idx-1);}
+    });
+});
+
+function step(id,dir){
+    if(f(id).classList.contains('disabled-alt')) return;
+    const cur=v(id)||0, d=getStep(id,cur);
+    sf(id,Math.max(0,rts(cur+dir*d,d)));
+    if(id==='sconto_e') onScontoInput('e');
+    else if(id==='sconto_p') onScontoInput('p');
+    else{if(!fase2) updBtn(); else ricalcola(id);}
+}
+
+function calcola(){
+    const L=v('lordo'),Se=v('sconto_e'),Sp=v('sconto_p'),N=v('netto');
+    if(!isNaN(Se)&&!isNaN(Sp)){alert("Sconto € oppure Sconto %, non entrambi.");return;}
+    const kn={};
+    if(!isNaN(L)) kn.lordo=L; if(!isNaN(Se)) kn.sconto_e=Se;
+    if(!isNaN(Sp)) kn.sconto_p=Sp; if(!isNaN(N)) kn.netto=N;
+    if(Object.keys(kn).length<2){alert("Inserisci almeno due valori.");return;}
+    const res=calcTutti(kn);
+    if(!res){alert("Valori non validi o incoerenti.");return;}
+    sf('lordo',res.lordo);sf('sconto_e',res.sconto_e);sf('sconto_p',res.sconto_p);sf('netto',res.netto);
+    f('sconto_e').classList.remove('disabled-alt');f('sconto_p').classList.remove('disabled-alt');
+    inputGruppi=[...new Set(Object.keys(kn).map(toG))];
+    enterFase2();
+}
+
+function enterFase2(){
+    fase2=true;updStili();btn.disabled=true;btn.classList.remove('ready');
+    document.getElementById('hint').style.display='block';
+    document.getElementById('statusBar').textContent='Modalità interattiva attiva';
+    document.getElementById('statusBar').classList.add('active');
+    const outG=GRUPPI.find(g=>!inputGruppi.includes(g));
+    if(outG){const id=outG==='sconto'?'sconto_e':outG;f(id).focus();f(id).select();}
+}
+
+function ricalcola(changedId){
+    const changedG=toG(changedId);
+    function readChanged(){
+        if(changedG!=='sconto') return readG(changedG);
+        const x=v(changedId);if(isNaN(x)) return null;
+        return changedId==='sconto_e'?{sconto_e:x}:{sconto_p:x};
+    }
+    const altri=GRUPPI.filter(g=>g!==changedG).sort((a,b)=>(inputGruppi.includes(b)?1:0)-(inputGruppi.includes(a)?1:0));
+    const kn={};
+    const rc=readChanged();if(rc) Object.assign(kn,rc);
+    let fisso=null;
+    for(const g of altri){const rg=readG(g);if(rg){Object.assign(kn,rg);fisso=g;break;}}
+    if(Object.keys(kn).length<2) return;
+    const res=calcTutti(kn);if(!res) return;
+    GRUPPI.filter(g=>g!==changedG&&g!==fisso).forEach(g=>scriviG(g,res,true));
+    if(changedG==='sconto'){const sId=changedId==='sconto_e'?'sconto_p':'sconto_e';sf(sId,sId==='sconto_e'?res.sconto_e:res.sconto_p);flash(sId);}
+    if(fisso==='sconto'){sf('sconto_e',res.sconto_e);sf('sconto_p',res.sconto_p);}
+}
+
+function updStili(){
+    NAV_IDS.forEach(id=>f(id).classList.remove('output'));
+    if(!fase2) return;
+    GRUPPI.forEach(g=>{
+        if(!inputGruppi.includes(g)){
+            if(g==='lordo') f('lordo').classList.add('output');
+            if(g==='netto') f('netto').classList.add('output');
+            if(g==='sconto'){f('sconto_e').classList.add('output');f('sconto_p').classList.add('output');}
+        }
+    });
+}
+
+function flash(id){const el=f(id);el.classList.add('flash');setTimeout(()=>el.classList.remove('flash'),350);}
+
+function resetCampi(){
+    fase2=false;inputGruppi=[];activeSconto=null;
+    NAV_IDS.forEach(id=>{f(id).value='';f(id).classList.remove('output','flash','accepted','disabled-alt');});
+    btn.disabled=true;btn.classList.remove('ready');
+    document.getElementById('hint').style.display='none';
+    document.getElementById('statusBar').textContent='Inserisci due valori e premi Calcola';
+    document.getElementById('statusBar').classList.remove('active');
+    f('lordo').focus();
+}
+f('lordo').focus();
+</script>
+</body>
+</html>
