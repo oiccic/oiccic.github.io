@@ -24,15 +24,15 @@
             border-radius: 24px; box-shadow: 0 10px 40px rgba(0,0,0,0.6);
             align-self: flex-start;
         }
-        h1 { font-size: 24px; font-weight: 700; margin-bottom: 8px; text-align: center; color: #ffffff; }
+        h1 { font-size: 26px; font-weight: 700; margin-bottom: 8px; text-align: center; color: #ffffff; }
         .status-bar {
-            text-align: center; font-size: 13px; font-weight: 500;
-            color: #aeaeb2; margin-bottom: 24px; min-height: 18px; transition: color 0.3s;
+            text-align: center; font-size: 15px; font-weight: 500;
+            color: #aeaeb2; margin-bottom: 24px; min-height: 20px; transition: color 0.3s;
         }
         .status-bar.active { color: #30d158; }
         .input-group { margin-bottom: 16px; }
         .label-row { display: flex; align-items: center; margin-bottom: 7px; margin-left: 2px; }
-        label { font-size: 12px; font-weight: 700; color: #aeaeb2; text-transform: uppercase; letter-spacing: 0.8px; }
+        label { font-size: 15px; font-weight: 700; color: #aeaeb2; text-transform: uppercase; letter-spacing: 0.5px; }
 
         .input-wrap { display: flex; align-items: center; gap: 8px; }
 
@@ -75,7 +75,7 @@
 
         .btn {
             width: 100%; background: #0a84ff; color: #ffffff; border: none;
-            padding: 17px; border-radius: 15px; font-size: 17px; font-weight: 700;
+            padding: 17px; border-radius: 15px; font-size: 18px; font-weight: 700;
             cursor: pointer; margin-top: 10px; transition: all 0.15s;
         }
         .btn:active  { background: #0060c0; transform: scale(0.98); }
@@ -83,10 +83,10 @@
         .btn.ready   { box-shadow: 0 0 0 3px rgba(10,132,255,0.4); }
         .btn-secondary {
             width: 100%; background: transparent; color: #ff453a; border: none;
-            padding: 14px; border-radius: 15px; font-size: 15px; font-weight: 600;
+            padding: 14px; border-radius: 15px; font-size: 17px; font-weight: 600;
             cursor: pointer; margin-top: 4px;
         }
-        .hint { font-size: 13px; color: #aeaeb2; text-align: center; margin-top: 14px; line-height: 1.6; }
+        .hint { font-size: 15px; color: #aeaeb2; text-align: center; margin-top: 14px; line-height: 1.6; }
         .hint b { color: #ffd60a; font-weight: 700; }
     </style>
 </head>
@@ -227,28 +227,13 @@
         const c=pIT(f('costo').value), p=pIT(f('prezzo').value), m=pIT(f('margine').value);
         const cOk=!isNaN(c), pOk=!isNaN(p), mOk=!isNaN(m);
         let cal=null;
-
-        if(cOk&&mOk&&!pOk){
-            if(m>=100){ alert("Margin ≥ 100%."); return; }
-            sf('prezzo',pFrom(c,m)); cal='prezzo';
-        } else if(pOk&&mOk&&!cOk){
-            if(m>=100){ alert("Margin ≥ 100%."); return; }
-            sf('costo',cFrom(p,m)); cal='costo';
-        } else if(cOk&&pOk&&!mOk){
-            if(p===0){ alert("Price cannot be 0."); return; }
-            sf('margine',mFrom(c,p)); cal='margine';
-        } else if(cOk&&pOk&&mOk){
-            if(p===0){ alert("Price cannot be 0."); return; }
-            sf('margine',mFrom(c,p)); cal='margine';
-        } else {
-            alert("Enter at least two values."); return;
-        }
-
-        if(cOk) sf('costo',c);
-        if(pOk) sf('prezzo',p);
-        if(mOk) sf('margine',m);
-        outputField=cal;
-        enterFase2();
+        if(cOk&&mOk&&!pOk){ if(m>=100){alert("Margin ≥ 100%.");return;} sf('prezzo',pFrom(c,m)); cal='prezzo'; }
+        else if(pOk&&mOk&&!cOk){ if(m>=100){alert("Margin ≥ 100%.");return;} sf('costo',cFrom(p,m)); cal='costo'; }
+        else if(cOk&&pOk&&!mOk){ if(p===0){alert("Price cannot be 0.");return;} sf('margine',mFrom(c,p)); cal='margine'; }
+        else if(cOk&&pOk&&mOk){ if(p===0){alert("Price cannot be 0.");return;} sf('margine',mFrom(c,p)); cal='margine'; }
+        else { alert("Enter at least two values."); return; }
+        if(cOk) sf('costo',c); if(pOk) sf('prezzo',p); if(mOk) sf('margine',m);
+        outputField=cal; enterFase2();
     }
 
     function enterFase2(){
@@ -261,13 +246,8 @@
 
     function onInput(changedId){
         if(changedId===lockedField) return;
-        if(lockedField){
-            const t=IDS.find(id=>id!==changedId&&id!==lockedField);
-            if(t){ outputField=t; recalc(); }
-        } else {
-            if(changedId===outputField) outputField=IDS.filter(id=>id!==changedId)[0];
-            recalc();
-        }
+        if(lockedField){ const t=IDS.find(id=>id!==changedId&&id!==lockedField); if(t){outputField=t;recalc();} }
+        else { if(changedId===outputField) outputField=IDS.filter(id=>id!==changedId)[0]; recalc(); }
         updStili();
     }
 
