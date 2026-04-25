@@ -1,15 +1,15 @@
 <!DOCTYPE html>
-<html lang="it">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="Sconti">
+    <meta name="apple-mobile-web-app-title" content="Discounts">
     <meta name="theme-color" content="#1c1c1e">
     <link rel="manifest" href="manifest.json">
     <link rel="apple-touch-icon" href="apple-touch-icon.png">
-    <title>Calcolatore Sconti</title>
+    <title>Discount Calculator</title>
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body {
@@ -24,44 +24,43 @@
             border-radius: 24px; box-shadow: 0 10px 40px rgba(0,0,0,0.6);
             align-self: flex-start;
         }
-        h1 { font-size: 24px; font-weight: 700; margin-bottom: 4px; text-align: center; color: #fff; }
-        .formula-hint { text-align: center; font-size: 12px; color: #48484a; margin-bottom: 20px; }
+        h1 { font-size: 24px; font-weight: 700; margin-bottom: 4px; text-align: center; color: #ffffff; }
+        .formula-hint { text-align: center; font-size: 12px; color: #aeaeb2; margin-bottom: 20px; }
         .status-bar {
             text-align: center; font-size: 13px; font-weight: 500;
-            color: #636366; margin-bottom: 20px; min-height: 18px; transition: color 0.3s;
+            color: #aeaeb2; margin-bottom: 20px; min-height: 18px; transition: color 0.3s;
         }
         .status-bar.active { color: #30d158; }
 
         .input-group { margin-bottom: 16px; }
         .label-row { display: flex; align-items: center; margin-bottom: 7px; margin-left: 2px; }
-        label { font-size: 12px; font-weight: 600; color: #636366; text-transform: uppercase; letter-spacing: 0.6px; }
+        label { font-size: 12px; font-weight: 700; color: #aeaeb2; text-transform: uppercase; letter-spacing: 0.8px; }
 
-        /* gap: 8px ≈ 3mm */
         .input-wrap { display: flex; align-items: center; gap: 8px; }
 
         input {
             flex: 1; padding: 14px;
-            border: 1.5px solid #38383a; border-radius: 13px;
+            border: 2px solid #48484a; border-radius: 13px;
             font-size: 20px; outline: none;
-            background: #2c2c2e; color: #fff;
+            background: #2c2c2e; color: #ffffff;
             min-width: 0; text-align: right; font-variant-numeric: tabular-nums;
             transition: border-color 0.2s, background-color 0.2s;
             -webkit-appearance: none;
         }
-        input::placeholder { color: #48484a; }
-        input:focus      { border-color: #0a84ff; }
-        input.output     { border-color: #0a84ff; background: #0d1f38; color: #0a84ff; font-weight: 700; }
-        input.flash      { background: #0d2a18 !important; border-color: #30d158 !important; transition: none; }
-        input.accepted   { border-color: #30d158; background: #0d2a18; }
-        input.disabled-alt { background: #1c1c1e; color: #3a3a3c; border-color: #2c2c2e; }
+        input::placeholder { color: #636366; }
+        input:focus      { border-color: #0a84ff; background: #1a2a3a; }
+        input.output     { border-color: #0a84ff; background: #0a1f35; color: #4db8ff; font-weight: 700; }
+        input.flash      { background: #0d3320 !important; border-color: #30d158 !important; transition: none; }
+        input.accepted   { border-color: #30d158; background: #0d3320; }
+        input.disabled-alt { background: #1c1c1e; color: #48484a; border-color: #2c2c2e; }
 
         .stepper { display: flex; flex-direction: column; gap: 3px; flex-shrink: 0; }
         .step-btn {
-            width: 38px; height: 26px;
-            border: 1.5px solid #38383a; border-radius: 8px;
+            width: 40px; height: 27px;
+            border: 2px solid #48484a; border-radius: 8px;
             background: #2c2c2e; cursor: pointer;
             display: flex; align-items: center; justify-content: center;
-            font-size: 16px; color: #ebebf5; font-weight: 500;
+            font-size: 16px; color: #ffffff; font-weight: 600;
             transition: all 0.15s; -webkit-tap-highlight-color: transparent; user-select: none;
         }
         .step-btn:active { background: #3a3a3c; transform: scale(0.93); }
@@ -69,35 +68,34 @@
         .sconto-block { margin-bottom: 16px; }
         .or-row { display: flex; align-items: center; gap: 12px; margin: 10px 0; }
         .or-row::before, .or-row::after { content: ''; flex: 1; height: 1px; background: #38383a; }
-        .or-label { font-size: 12px; font-weight: 700; color: #48484a; letter-spacing: 1px; }
+        .or-label { font-size: 12px; font-weight: 700; color: #636366; letter-spacing: 1px; }
 
         .divider { height: 1px; background: #2c2c2e; margin: 6px 0 18px; }
 
         .btn {
-            width: 100%; background: #0a84ff; color: white; border: none;
-            padding: 17px; border-radius: 15px; font-size: 17px; font-weight: 600;
+            width: 100%; background: #0a84ff; color: #ffffff; border: none;
+            padding: 17px; border-radius: 15px; font-size: 17px; font-weight: 700;
             cursor: pointer; margin-top: 10px; transition: all 0.15s;
         }
         .btn:active  { background: #0060c0; transform: scale(0.98); }
-        .btn:disabled { background: #2c2c2e; color: #48484a; cursor: not-allowed; transform: none; }
-        .btn.ready   { box-shadow: 0 0 0 3px rgba(10,132,255,0.35); }
+        .btn:disabled { background: #2c2c2e; color: #636366; cursor: not-allowed; transform: none; border: 2px solid #38383a; }
+        .btn.ready   { box-shadow: 0 0 0 3px rgba(10,132,255,0.4); }
         .btn-secondary {
             width: 100%; background: transparent; color: #ff453a; border: none;
-            padding: 14px; border-radius: 15px; font-size: 15px; font-weight: 500;
+            padding: 14px; border-radius: 15px; font-size: 15px; font-weight: 600;
             cursor: pointer; margin-top: 4px;
         }
-        .hint { font-size: 13px; color: #48484a; text-align: center; margin-top: 14px; line-height: 1.6; }
+        .hint { font-size: 13px; color: #aeaeb2; text-align: center; margin-top: 14px; line-height: 1.6; }
     </style>
 </head>
 <body>
 <div class="container">
-    <h1>Calcolatore Sconti</h1>
-    <div class="formula-hint">Lordo − Sconto = Netto</div>
-    <div class="status-bar" id="statusBar">Inserisci due valori e premi Calcola</div>
+    <h1>Discount Calculator</h1>
+    <div class="formula-hint">Gross − Discount = Net</div>
+    <div class="status-bar" id="statusBar">Enter two values and press Calculate</div>
 
-    <!-- LORDO -->
     <div class="input-group">
-        <div class="label-row"><label>Prezzo Lordo (€)</label></div>
+        <div class="label-row"><label>Gross Price (€)</label></div>
         <div class="input-wrap">
             <input type="text" inputmode="decimal" id="lordo" placeholder="0,00">
             <div class="stepper">
@@ -109,10 +107,9 @@
 
     <div class="divider"></div>
 
-    <!-- SCONTO € e % verticali -->
     <div class="sconto-block">
         <div class="input-group" style="margin-bottom:0">
-            <div class="label-row"><label>Sconto (€)</label></div>
+            <div class="label-row"><label>Discount (€)</label></div>
             <div class="input-wrap">
                 <input type="text" inputmode="decimal" id="sconto_e" placeholder="0,00">
                 <div class="stepper">
@@ -121,9 +118,9 @@
                 </div>
             </div>
         </div>
-        <div class="or-row"><span class="or-label">O</span></div>
+        <div class="or-row"><span class="or-label">OR</span></div>
         <div class="input-group" style="margin-bottom:0">
-            <div class="label-row"><label>Sconto (%)</label></div>
+            <div class="label-row"><label>Discount (%)</label></div>
             <div class="input-wrap">
                 <input type="text" inputmode="decimal" id="sconto_p" placeholder="0,00">
                 <div class="stepper">
@@ -136,9 +133,8 @@
 
     <div class="divider" style="margin-top:18px"></div>
 
-    <!-- NETTO -->
     <div class="input-group">
-        <div class="label-row"><label>Prezzo Netto (€)</label></div>
+        <div class="label-row"><label>Net Price (€)</label></div>
         <div class="input-wrap">
             <input type="text" inputmode="decimal" id="netto" placeholder="0,00">
             <div class="stepper">
@@ -148,9 +144,9 @@
         </div>
     </div>
 
-    <button class="btn" id="btnCalcola" onclick="calcola()" disabled>Calcola</button>
-    <button class="btn-secondary" tabindex="-1" onclick="resetCampi()">Azzera tutto</button>
-    <div class="hint" id="hint" style="display:none">Modifica qualsiasi valore — gli altri si aggiornano in tempo reale</div>
+    <button class="btn" id="btnCalcola" onclick="calcola()" disabled>Calculate</button>
+    <button class="btn-secondary" tabindex="-1" onclick="resetCampi()">Reset</button>
+    <div class="hint" id="hint" style="display:none">Edit any value — the others update live</div>
 </div>
 
 <script>
@@ -172,16 +168,16 @@ function fIT(num,dec=2){
     if(isNaN(num)) return '';
     return num.toLocaleString('it-IT',{minimumFractionDigits:dec,maximumFractionDigits:dec});
 }
-function sf(id,n){f(id).value=fIT(n);}
-function v(id){return pIT(f(id).value);}
-function ok(id){return!isNaN(v(id));}
+function sf(id,n){ f(id).value=fIT(n); }
+function v(id){ return pIT(f(id).value); }
+function ok(id){ return !isNaN(v(id)); }
 
 function getStep(id,val){
     if(id==='sconto_p') return 0.5;
     const a=Math.abs(val);
     if(a<=20) return 0.10; if(a<=100) return 1; if(a<=30000) return 1000; return 10000;
 }
-function rts(val,s){return Math.round(val*(1/s))/(1/s);}
+function rts(val,s){ return Math.round(val*(1/s))/(1/s); }
 
 function calcTutti(kn){
     let{lordo:L,sconto_e:S,sconto_p:P,netto:N}=kn;
@@ -205,13 +201,17 @@ function scriviG(g,res,fl){
 function readG(g){
     if(g==='lordo'){const x=v('lordo');return isNaN(x)?null:{lordo:x};}
     if(g==='netto'){const x=v('netto');return isNaN(x)?null:{netto:x};}
-    if(g==='sconto'){const xe=v('sconto_e');if(!isNaN(xe)) return{sconto_e:xe};const xp=v('sconto_p');if(!isNaN(xp)) return{sconto_p:xp};return null;}
+    if(g==='sconto'){
+        const xe=v('sconto_e');if(!isNaN(xe)) return{sconto_e:xe};
+        const xp=v('sconto_p');if(!isNaN(xp)) return{sconto_p:xp};
+        return null;
+    }
 }
 
 function updBtn(){
     if(fase2) return;
     const n=[ok('lordo'),ok('netto'),ok('sconto_e')||ok('sconto_p')].filter(Boolean).length;
-    btn.disabled=n<2;btn.classList.toggle('ready',n>=2);
+    btn.disabled=n<2; btn.classList.toggle('ready',n>=2);
 }
 
 function onScontoInput(tipo){
@@ -264,13 +264,13 @@ function step(id,dir){
 
 function calcola(){
     const L=v('lordo'),Se=v('sconto_e'),Sp=v('sconto_p'),N=v('netto');
-    if(!isNaN(Se)&&!isNaN(Sp)){alert("Sconto € oppure Sconto %, non entrambi.");return;}
+    if(!isNaN(Se)&&!isNaN(Sp)){alert("Enter Discount € or Discount %, not both.");return;}
     const kn={};
     if(!isNaN(L)) kn.lordo=L; if(!isNaN(Se)) kn.sconto_e=Se;
     if(!isNaN(Sp)) kn.sconto_p=Sp; if(!isNaN(N)) kn.netto=N;
-    if(Object.keys(kn).length<2){alert("Inserisci almeno due valori.");return;}
+    if(Object.keys(kn).length<2){alert("Enter at least two values.");return;}
     const res=calcTutti(kn);
-    if(!res){alert("Valori non validi o incoerenti.");return;}
+    if(!res){alert("Invalid or inconsistent values.");return;}
     sf('lordo',res.lordo);sf('sconto_e',res.sconto_e);sf('sconto_p',res.sconto_p);sf('netto',res.netto);
     f('sconto_e').classList.remove('disabled-alt');f('sconto_p').classList.remove('disabled-alt');
     inputGruppi=[...new Set(Object.keys(kn).map(toG))];
@@ -280,7 +280,7 @@ function calcola(){
 function enterFase2(){
     fase2=true;updStili();btn.disabled=true;btn.classList.remove('ready');
     document.getElementById('hint').style.display='block';
-    document.getElementById('statusBar').textContent='Modalità interattiva attiva';
+    document.getElementById('statusBar').textContent='Interactive mode active';
     document.getElementById('statusBar').classList.add('active');
     const outG=GRUPPI.find(g=>!inputGruppi.includes(g));
     if(outG){const id=outG==='sconto'?'sconto_e':outG;f(id).focus();f(id).select();}
@@ -324,7 +324,7 @@ function resetCampi(){
     NAV_IDS.forEach(id=>{f(id).value='';f(id).classList.remove('output','flash','accepted','disabled-alt');});
     btn.disabled=true;btn.classList.remove('ready');
     document.getElementById('hint').style.display='none';
-    document.getElementById('statusBar').textContent='Inserisci due valori e premi Calcola';
+    document.getElementById('statusBar').textContent='Enter two values and press Calculate';
     document.getElementById('statusBar').classList.remove('active');
     f('lordo').focus();
 }

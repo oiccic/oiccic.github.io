@@ -1,15 +1,15 @@
 <!DOCTYPE html>
-<html lang="it">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="Margini">
+    <meta name="apple-mobile-web-app-title" content="Margins">
     <meta name="theme-color" content="#1c1c1e">
     <link rel="manifest" href="manifest.json">
     <link rel="apple-touch-icon" href="apple-touch-icon.png">
-    <title>Calcolatore Margini</title>
+    <title>Margin Calculator</title>
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body {
@@ -24,80 +24,79 @@
             border-radius: 24px; box-shadow: 0 10px 40px rgba(0,0,0,0.6);
             align-self: flex-start;
         }
-        h1 { font-size: 24px; font-weight: 700; margin-bottom: 8px; text-align: center; color: #fff; }
+        h1 { font-size: 24px; font-weight: 700; margin-bottom: 8px; text-align: center; color: #ffffff; }
         .status-bar {
             text-align: center; font-size: 13px; font-weight: 500;
-            color: #636366; margin-bottom: 24px; min-height: 18px; transition: color 0.3s;
+            color: #aeaeb2; margin-bottom: 24px; min-height: 18px; transition: color 0.3s;
         }
         .status-bar.active { color: #30d158; }
         .input-group { margin-bottom: 16px; }
         .label-row { display: flex; align-items: center; margin-bottom: 7px; margin-left: 2px; }
-        label { font-size: 12px; font-weight: 600; color: #636366; text-transform: uppercase; letter-spacing: 0.6px; }
+        label { font-size: 12px; font-weight: 700; color: #aeaeb2; text-transform: uppercase; letter-spacing: 0.8px; }
 
-        /* lock [8px] input [8px] stepper  — gap ≈ 3mm a 96dpi */
         .input-wrap { display: flex; align-items: center; gap: 8px; }
 
         input {
             flex: 1; padding: 15px 14px;
-            border: 1.5px solid #38383a; border-radius: 13px;
+            border: 2px solid #48484a; border-radius: 13px;
             font-size: 20px; outline: none;
-            background: #2c2c2e; color: #fff;
+            background: #2c2c2e; color: #ffffff;
             min-width: 0; text-align: right; font-variant-numeric: tabular-nums;
             transition: border-color 0.2s, background-color 0.2s;
             -webkit-appearance: none;
         }
-        input::placeholder { color: #48484a; }
-        input:focus   { border-color: #0a84ff; }
-        input.locked  { border-color: #ff9f0a; background: #2a2010; color: #ff9f0a; font-weight: 600; }
-        input.output  { border-color: #0a84ff; background: #0d1f38; color: #0a84ff; font-weight: 700; }
-        input.flash   { background: #0d2a18 !important; border-color: #30d158 !important; transition: none; }
-        input.accepted { border-color: #30d158; background: #0d2a18; }
+        input::placeholder { color: #636366; }
+        input:focus   { border-color: #0a84ff; background: #1a2a3a; }
+        input.locked  { border-color: #ff9f0a; background: #2a1f0a; color: #ffd60a; font-weight: 700; }
+        input.output  { border-color: #0a84ff; background: #0a1f35; color: #4db8ff; font-weight: 700; }
+        input.flash   { background: #0d3320 !important; border-color: #30d158 !important; transition: none; }
+        input.accepted { border-color: #30d158; background: #0d3320; }
 
         .stepper { display: flex; flex-direction: column; gap: 3px; flex-shrink: 0; }
         .step-btn {
-            width: 38px; height: 26px;
-            border: 1.5px solid #38383a; border-radius: 8px;
+            width: 40px; height: 27px;
+            border: 2px solid #48484a; border-radius: 8px;
             background: #2c2c2e; cursor: pointer;
             display: flex; align-items: center; justify-content: center;
-            font-size: 16px; color: #ebebf5; font-weight: 500;
+            font-size: 16px; color: #ffffff; font-weight: 600;
             transition: all 0.15s; -webkit-tap-highlight-color: transparent; user-select: none;
         }
         .step-btn:active { background: #3a3a3c; transform: scale(0.93); }
 
         .lock-btn {
-            flex-shrink: 0; width: 44px; height: 54px;
-            border: 1.5px solid #38383a; border-radius: 13px;
+            flex-shrink: 0; width: 46px; height: 56px;
+            border: 2px solid #48484a; border-radius: 13px;
             background: #2c2c2e; cursor: pointer;
             display: flex; align-items: center; justify-content: center;
-            font-size: 20px; transition: all 0.2s;
+            font-size: 22px; transition: all 0.2s;
             -webkit-tap-highlight-color: transparent; user-select: none;
         }
         .lock-btn.locked { background: #ff9f0a; border-color: #ff9f0a; }
 
         .btn {
-            width: 100%; background: #0a84ff; color: white; border: none;
-            padding: 17px; border-radius: 15px; font-size: 17px; font-weight: 600;
+            width: 100%; background: #0a84ff; color: #ffffff; border: none;
+            padding: 17px; border-radius: 15px; font-size: 17px; font-weight: 700;
             cursor: pointer; margin-top: 10px; transition: all 0.15s;
         }
         .btn:active  { background: #0060c0; transform: scale(0.98); }
-        .btn:disabled { background: #2c2c2e; color: #48484a; cursor: not-allowed; transform: none; }
-        .btn.ready   { box-shadow: 0 0 0 3px rgba(10,132,255,0.35); }
+        .btn:disabled { background: #2c2c2e; color: #636366; cursor: not-allowed; transform: none; border: 2px solid #38383a; }
+        .btn.ready   { box-shadow: 0 0 0 3px rgba(10,132,255,0.4); }
         .btn-secondary {
             width: 100%; background: transparent; color: #ff453a; border: none;
-            padding: 14px; border-radius: 15px; font-size: 15px; font-weight: 500;
+            padding: 14px; border-radius: 15px; font-size: 15px; font-weight: 600;
             cursor: pointer; margin-top: 4px;
         }
-        .hint { font-size: 13px; color: #48484a; text-align: center; margin-top: 14px; line-height: 1.6; }
-        .hint b { color: #ff9f0a; font-weight: 600; }
+        .hint { font-size: 13px; color: #aeaeb2; text-align: center; margin-top: 14px; line-height: 1.6; }
+        .hint b { color: #ffd60a; font-weight: 700; }
     </style>
 </head>
 <body>
 <div class="container">
-    <h1>Margini Business</h1>
-    <div class="status-bar" id="statusBar">Inserisci due valori e premi Calcola</div>
+    <h1>Margin Calculator</h1>
+    <div class="status-bar" id="statusBar">Enter two values and press Calculate</div>
 
     <div class="input-group">
-        <div class="label-row"><label>Costo (€)</label></div>
+        <div class="label-row"><label>Cost (€)</label></div>
         <div class="input-wrap">
             <button class="lock-btn" tabindex="-1" id="lock-costo" onclick="toggleLock('costo')">🔓</button>
             <input type="text" inputmode="decimal" id="costo" placeholder="0,00">
@@ -109,7 +108,7 @@
     </div>
 
     <div class="input-group">
-        <div class="label-row"><label>Prezzo (€)</label></div>
+        <div class="label-row"><label>Price (€)</label></div>
         <div class="input-wrap">
             <button class="lock-btn" tabindex="-1" id="lock-prezzo" onclick="toggleLock('prezzo')">🔓</button>
             <input type="text" inputmode="decimal" id="prezzo" placeholder="0,00">
@@ -121,7 +120,7 @@
     </div>
 
     <div class="input-group">
-        <div class="label-row"><label>Margine (%)</label></div>
+        <div class="label-row"><label>Margin (%)</label></div>
         <div class="input-wrap">
             <button class="lock-btn" tabindex="-1" id="lock-margine" onclick="toggleLock('margine')">🔓</button>
             <input type="text" inputmode="decimal" id="margine" placeholder="0,00">
@@ -132,23 +131,24 @@
         </div>
     </div>
 
-    <button class="btn" id="btnCalcola" onclick="calcola()" disabled>Calcola</button>
-    <button class="btn-secondary" tabindex="-1" onclick="resetCampi()">Azzera tutto</button>
-    <div class="hint" id="hint" style="display:none"><b>🔒 Campo arancione = fisso</b><br>Modifica gli altri due — il terzo si aggiorna</div>
+    <button class="btn" id="btnCalcola" onclick="calcola()" disabled>Calculate</button>
+    <button class="btn-secondary" tabindex="-1" onclick="resetCampi()">Reset</button>
+    <div class="hint" id="hint" style="display:none"><b>🔒 Orange field = locked</b><br>Edit the other two — the third updates live</div>
 </div>
 <script>
     let lockedField=null, outputField=null, fase2=false;
     const IDS=['costo','prezzo','margine'];
     const btn=document.getElementById('btnCalcola');
-    const f=id=>document.getElementById(id);
-    const lb=id=>document.getElementById('lock-'+id);
+
+    function f(id){ return document.getElementById(id); }
+    function lb(id){ return document.getElementById('lock-'+id); }
 
     function getStep(id,val){
         if(id==='margine') return 0.5;
         const v=Math.abs(val);
         if(v<=20) return 0.10; if(v<=100) return 1; if(v<=30000) return 1000; return 10000;
     }
-    function rts(v,s){return Math.round(v*(1/s))/(1/s);}
+    function rts(v,s){ return Math.round(v*(1/s))/(1/s); }
 
     function pIT(str){
         if(!str||!str.trim()) return NaN;
@@ -161,7 +161,7 @@
         if(isNaN(num)) return '';
         return num.toLocaleString('it-IT',{minimumFractionDigits:dec,maximumFractionDigits:dec});
     }
-    function sf(id,n){f(id).value=fIT(n);}
+    function sf(id,n){ f(id).value=fIT(n); }
 
     function updBtn(){
         if(fase2) return;
@@ -171,28 +171,36 @@
 
     function accept(id){
         const v=pIT(f(id).value);
-        if(!isNaN(v)){sf(id,v);f(id).classList.add('accepted');setTimeout(()=>f(id).classList.remove('accepted'),600);}
+        if(!isNaN(v)){ sf(id,v); f(id).classList.add('accepted'); setTimeout(()=>f(id).classList.remove('accepted'),600); }
         updBtn();
     }
 
     function goTo(idx){
         const id=IDS[((idx%IDS.length)+IDS.length)%IDS.length];
-        f(id).focus();f(id).select();
+        f(id).focus(); f(id).select();
     }
 
-    IDS.forEach((id,idx)=>{
-        f(id).addEventListener('blur',()=>{if(!fase2) accept(id); else {const v=pIT(f(id).value);if(!isNaN(v)) sf(id,v);}});
-        f(id).addEventListener('input',()=>{if(!fase2) updBtn(); else onInput(id);});
+    function attachListeners(id, idx){
+        f(id).addEventListener('blur',()=>{
+            const v=pIT(f(id).value); if(!isNaN(v)) sf(id,v);
+            if(!fase2) updBtn();
+        });
+        f(id).addEventListener('input',()=>{ if(!fase2) updBtn(); else onInput(id); });
         f(id).addEventListener('keydown',e=>{
             if(e.key==='Enter'){
                 e.preventDefault();
-                if(!fase2){accept(id);if(!btn.disabled){calc();return;}const pv=IDS.findIndex((fid,fi)=>fi>idx&&isNaN(pIT(f(fid).value)));goTo(pv!==-1?pv:idx+1);}
-                else{const v=pIT(f(id).value);if(!isNaN(v))sf(id,v);goTo(idx+1);}
+                if(!fase2){
+                    accept(id);
+                    if(!btn.disabled){ calcola(); return; }
+                    const pv=IDS.findIndex((fid,fi)=>fi>idx&&isNaN(pIT(f(fid).value)));
+                    goTo(pv!==-1?pv:idx+1);
+                } else { const v=pIT(f(id).value); if(!isNaN(v)) sf(id,v); goTo(idx+1); }
             }
-            else if(e.key==='ArrowDown'){e.preventDefault();accept(id);goTo(idx+1);}
-            else if(e.key==='ArrowUp'){e.preventDefault();accept(id);goTo(idx-1);}
+            else if(e.key==='ArrowDown'){ e.preventDefault(); accept(id); goTo(idx+1); }
+            else if(e.key==='ArrowUp'){   e.preventDefault(); accept(id); goTo(idx-1); }
         });
-    });
+    }
+    IDS.forEach((id,idx)=>attachListeners(id,idx));
 
     function step(id,dir){
         if(id===lockedField) return;
@@ -201,58 +209,78 @@
         if(fase2) onInput(id); else updBtn();
     }
 
-    function pFrom(c,m){return c/(1-m/100);}
-    function cFrom(p,m){return p*(1-m/100);}
-    function mFrom(c,p){return((p-c)/p)*100;}
+    function pFrom(c,m){ return c/(1-m/100); }
+    function cFrom(p,m){ return p*(1-m/100); }
+    function mFrom(c,p){ return ((p-c)/p)*100; }
 
     function toggleLock(id){
         if(lockedField===id){
-            lockedField=null;lb(id).classList.remove('locked');lb(id).textContent='🔓';f(id).classList.remove('locked');
+            lockedField=null; lb(id).classList.remove('locked'); lb(id).textContent='🔓'; f(id).classList.remove('locked');
         } else {
-            if(lockedField){lb(lockedField).classList.remove('locked');lb(lockedField).textContent='🔓';f(lockedField).classList.remove('locked');}
-            lockedField=id;lb(id).classList.add('locked');lb(id).textContent='🔒';f(id).classList.add('locked');
+            if(lockedField){ lb(lockedField).classList.remove('locked'); lb(lockedField).textContent='🔓'; f(lockedField).classList.remove('locked'); }
+            lockedField=id; lb(id).classList.add('locked'); lb(id).textContent='🔒'; f(id).classList.add('locked');
             if(fase2) fixOutput();
         }
     }
 
-    function calc(){
-        const c=pIT(f('costo').value),p=pIT(f('prezzo').value),m=pIT(f('margine').value);
-        const cO=!isNaN(c),pO=!isNaN(p),mO=!isNaN(m);
+    function calcola(){
+        const c=pIT(f('costo').value), p=pIT(f('prezzo').value), m=pIT(f('margine').value);
+        const cOk=!isNaN(c), pOk=!isNaN(p), mOk=!isNaN(m);
         let cal=null;
-        if(cO&&mO&&!pO){if(m>=100){alert("Margine ≥ 100%.");return;}sf('prezzo',pFrom(c,m));cal='prezzo';}
-        else if(pO&&mO&&!cO){if(m>=100){alert("Margine ≥ 100%.");return;}sf('costo',cFrom(p,m));cal='costo';}
-        else if(cO&&pO&&!mO){if(p===0){alert("Prezzo non può essere 0.");return;}sf('margine',mFrom(c,p));cal='margine';}
-        else if(cO&&pO&&mO){if(p===0){alert("Prezzo non può essere 0.");return;}sf('margine',mFrom(c,p));cal='margine';}
-        else{alert("Inserisci almeno due valori.");return;}
-        if(cO)sf('costo',c);if(pO)sf('prezzo',p);if(mO)sf('margine',m);
-        outputField=cal;enterFase2();
+
+        if(cOk&&mOk&&!pOk){
+            if(m>=100){ alert("Margin ≥ 100%."); return; }
+            sf('prezzo',pFrom(c,m)); cal='prezzo';
+        } else if(pOk&&mOk&&!cOk){
+            if(m>=100){ alert("Margin ≥ 100%."); return; }
+            sf('costo',cFrom(p,m)); cal='costo';
+        } else if(cOk&&pOk&&!mOk){
+            if(p===0){ alert("Price cannot be 0."); return; }
+            sf('margine',mFrom(c,p)); cal='margine';
+        } else if(cOk&&pOk&&mOk){
+            if(p===0){ alert("Price cannot be 0."); return; }
+            sf('margine',mFrom(c,p)); cal='margine';
+        } else {
+            alert("Enter at least two values."); return;
+        }
+
+        if(cOk) sf('costo',c);
+        if(pOk) sf('prezzo',p);
+        if(mOk) sf('margine',m);
+        outputField=cal;
+        enterFase2();
     }
 
     function enterFase2(){
-        fase2=true;updStili();btn.disabled=true;btn.classList.remove('ready');
+        fase2=true; updStili(); btn.disabled=true; btn.classList.remove('ready');
         document.getElementById('hint').style.display='block';
         const sb=document.getElementById('statusBar');
-        sb.textContent='Modalità interattiva — usa 🔒 per bloccare';sb.classList.add('active');
-        f(outputField).focus();f(outputField).select();
+        sb.textContent='Interactive mode — use 🔒 to lock a field'; sb.classList.add('active');
+        f(outputField).focus(); f(outputField).select();
     }
 
     function onInput(changedId){
         if(changedId===lockedField) return;
-        if(lockedField){const t=IDS.find(id=>id!==changedId&&id!==lockedField);if(t){outputField=t;recalc();}}
-        else{if(changedId===outputField) outputField=IDS.filter(id=>id!==changedId)[0];recalc();}
+        if(lockedField){
+            const t=IDS.find(id=>id!==changedId&&id!==lockedField);
+            if(t){ outputField=t; recalc(); }
+        } else {
+            if(changedId===outputField) outputField=IDS.filter(id=>id!==changedId)[0];
+            recalc();
+        }
         updStili();
     }
 
     function recalc(){
-        const c=pIT(f('costo').value),p=pIT(f('prezzo').value),m=pIT(f('margine').value);
-        if(outputField==='prezzo'&&!isNaN(c)&&!isNaN(m)&&m<100){sf('prezzo',pFrom(c,m));fl(f('prezzo'));}
-        else if(outputField==='costo'&&!isNaN(p)&&!isNaN(m)&&m<100){sf('costo',cFrom(p,m));fl(f('costo'));}
-        else if(outputField==='margine'&&!isNaN(c)&&!isNaN(p)&&p!==0){sf('margine',mFrom(c,p));fl(f('margine'));}
+        const c=pIT(f('costo').value), p=pIT(f('prezzo').value), m=pIT(f('margine').value);
+        if(outputField==='prezzo'&&!isNaN(c)&&!isNaN(m)&&m<100){ sf('prezzo',pFrom(c,m)); fl(f('prezzo')); }
+        else if(outputField==='costo'&&!isNaN(p)&&!isNaN(m)&&m<100){ sf('costo',cFrom(p,m)); fl(f('costo')); }
+        else if(outputField==='margine'&&!isNaN(c)&&!isNaN(p)&&p!==0){ sf('margine',mFrom(c,p)); fl(f('margine')); }
     }
 
     function fixOutput(){
         if(outputField&&outputField!==lockedField) return;
-        const a=IDS.find(id=>id!==lockedField&&id!==outputField);if(a){outputField=a;}updStili();
+        const a=IDS.find(id=>id!==lockedField&&id!==outputField); if(a) outputField=a; updStili();
     }
 
     function updStili(){
@@ -261,27 +289,21 @@
         if(outputField&&outputField!==lockedField) f(outputField).classList.add('output');
     }
 
-    function fl(el){el.classList.add('flash');setTimeout(()=>el.classList.remove('flash'),350);}
+    function fl(el){ el.classList.add('flash'); setTimeout(()=>el.classList.remove('flash'),350); }
 
     function resetCampi(){
-        fase2=false;lockedField=null;outputField=null;
+        fase2=false; lockedField=null; outputField=null;
         IDS.forEach(id=>{
-            const el=f(id),clone=el.cloneNode(true);
+            const el=f(id), clone=el.cloneNode(true);
             el.parentNode.replaceChild(clone,el);
-            clone.value='';clone.classList.remove('locked','output','flash','accepted');
+            clone.value=''; clone.classList.remove('locked','output','flash','accepted');
             const idx=IDS.indexOf(id);
-            clone.addEventListener('blur',()=>{if(!fase2) accept(id); else{const v=pIT(clone.value);if(!isNaN(v))sf(id,v);}});
-            clone.addEventListener('input',()=>{if(!fase2) updBtn(); else onInput(id);});
-            clone.addEventListener('keydown',e=>{
-                if(e.key==='Enter'){e.preventDefault();if(!fase2){accept(id);if(!btn.disabled){calc();return;}const pv=IDS.findIndex((fid,fi)=>fi>idx&&isNaN(pIT(f(fid).value)));goTo(pv!==-1?pv:idx+1);}else{const v=pIT(clone.value);if(!isNaN(v))sf(id,v);goTo(idx+1);}}
-                else if(e.key==='ArrowDown'){e.preventDefault();accept(id);goTo(idx+1);}
-                else if(e.key==='ArrowUp'){e.preventDefault();accept(id);goTo(idx-1);}
-            });
-            lb(id).classList.remove('locked');lb(id).textContent='🔓';
+            attachListeners(id,idx);
+            lb(id).classList.remove('locked'); lb(id).textContent='🔓';
         });
-        btn.disabled=true;btn.classList.remove('ready');
+        btn.disabled=true; btn.classList.remove('ready');
         document.getElementById('hint').style.display='none';
-        document.getElementById('statusBar').textContent='Inserisci due valori e premi Calcola';
+        document.getElementById('statusBar').textContent='Enter two values and press Calculate';
         document.getElementById('statusBar').classList.remove('active');
         goTo(0);
     }
