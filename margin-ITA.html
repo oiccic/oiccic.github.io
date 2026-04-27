@@ -190,12 +190,12 @@
     }
 
     function enterFase2(){
-        fase2=true; updStili(); btn.disabled=true; btn.classList.remove('ready');
-        document.getElementById('hint').style.display='block';
-        const sb=document.getElementById('statusBar');
-        sb.textContent='Interactive mode — use 🔒 to lock a field'; sb.classList.add('active');
-        f(outputField).focus(); f(outputField).select();
-    }
+    fase2=true; updStili(); btn.disabled=true; btn.classList.remove('ready');
+    document.getElementById('hint').style.display='block';
+    const sb=document.getElementById('statusBar');
+    sb.textContent='Interactive mode — use 🔒 to lock a field'; sb.classList.add('active');
+    f(outputField).focus();
+	}
 
     function onInput(changedId){
         if(changedId===lockedField) return;

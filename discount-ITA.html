@@ -237,7 +237,7 @@ function enterFase2(){
     document.getElementById('statusBar').textContent='Interactive mode active';
     document.getElementById('statusBar').classList.add('active');
     const outG=GRUPPI.find(g=>!inputGruppi.includes(g));
-    if(outG){const id=outG==='sconto'?'sconto_e':outG;f(id).focus();f(id).select();}
+    if(outG){const id=outG==='sconto'?'sconto_e':outG;f(id).focus();}
 }
 
 function ricalcola(changedId){
