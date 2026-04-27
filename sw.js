@@ -1,4 +1,4 @@
-const CACHE_NAME = 'calcolatori-v3';
+const CACHE_NAME = 'calcolatori-sepia';
 const FILES = [
     '/',
     '/index.html',
