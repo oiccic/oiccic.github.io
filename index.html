@@ -80,5 +80,13 @@
     </div>
 
     <p class="footer">Tap an item to open the calculator</p>
+
+<script>
+if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js');
+    });
+}
+</script>
 </body>
 </html>
