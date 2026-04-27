@@ -1,4 +1,4 @@
-const CACHE_NAME = 'calcolatori-sepia';
+const CACHE_NAME = 'calcolatori-sepia-v2'; // INCREMENTA QUESTO NUMERO AD OGNI UPDATE
 const FILES = [
     '/',
     '/index.html',
@@ -11,7 +11,6 @@ const FILES = [
     '/icon-512.png'
 ];
 
-// Installazione: metti tutto in cache
 self.addEventListener('install', e => {
     e.waitUntil(
         caches.open(CACHE_NAME)
@@ -20,7 +19,6 @@ self.addEventListener('install', e => {
     );
 });
 
-// Attivazione: elimina cache vecchie
 self.addEventListener('activate', e => {
     e.waitUntil(
         caches.keys().then(keys =>
@@ -29,10 +27,17 @@ self.addEventListener('activate', e => {
     );
 });
 
-// Fetch: serve sempre dalla cache, rete solo se non trovato
+// SOSTITUISCI IL VECCHIO FETCH CON QUESTO
 self.addEventListener('fetch', e => {
     e.respondWith(
-        caches.match(e.request)
-            .then(cached => cached || fetch(e.request))
+        caches.open(CACHE_NAME).then(cache => {
+            return cache.match(e.request).then(cachedResponse => {
+                const fetchedResponse = fetch(e.request).then(networkResponse => {
+                    cache.put(e.request, networkResponse.clone());
+                    return networkResponse;
+                });
+                return cachedResponse || fetchedResponse;
+            });
+        })
     );
 });

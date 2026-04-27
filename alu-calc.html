@@ -1,174 +1,73 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="it">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="ALU Calc">
-    <meta name="theme-color" content="#1c1c1e">
-    <link rel="manifest" href="manifest.json">
-    <link rel="apple-touch-icon" href="apple-touch-icon.png">
+    <meta name="theme-color" content="#f4ecd8">
     <title>ALU Calculator</title>
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            background: #000;
-            display: flex; justify-content: center;
-            padding: 20px; min-height: 100vh;
-        }
-        .container {
-            width: 100%; max-width: 500px;
-            background: #1c1c1e; padding: 28px 20px;
-            border-radius: 24px; box-shadow: 0 10px 40px rgba(0,0,0,0.6);
-            align-self: flex-start;
-        }
-
-        h1 { font-size: 26px; font-weight: 700; text-align: center; color: #fff; margin-bottom: 4px; }
-        .subtitle { text-align: center; font-size: 14px; color: #aeaeb2; margin-bottom: 24px; }
-
-        /* Inputs affiancati */
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background: #f4ecd8; display: flex; justify-content: center; padding: 20px; min-height: 100vh; }
+        .container { width: 100%; max-width: 500px; background: #e8dec8; padding: 28px 20px; border-radius: 24px; border: 1px solid #dcd0b8; }
+        h1 { font-size: 26px; font-weight: 700; text-align: center; color: #4a3a2a; margin-bottom: 4px; }
+        .subtitle { text-align: center; font-size: 14px; color: #8b7355; margin-bottom: 24px; }
         .inputs { display: flex; gap: 12px; margin-bottom: 20px; }
         .input-group { flex: 1; }
-        label {
-            display: block; font-size: 14px; font-weight: 700;
-            color: #aeaeb2; text-transform: uppercase; letter-spacing: 0.8px;
-            margin-bottom: 7px; margin-left: 2px;
-        }
-        input {
-            width: 100%; padding: 15px 14px;
-            border: 2px solid #48484a; border-radius: 13px;
-            font-size: 20px; outline: none;
-            background: #2c2c2e; color: #fff;
-            text-align: right; font-variant-numeric: tabular-nums;
-            transition: border-color 0.2s, background 0.2s;
-            -webkit-appearance: none;
-        }
-        input::placeholder { color: #636366; }
-        input:focus { border-color: #0a84ff; background: #1a2a3a; }
-        .unit { text-align: right; font-size: 12px; color: #636366; margin-top: 5px; font-weight: 500; }
-
-        /* Delta row */
-        .delta-row {
-            display: flex; align-items: center; justify-content: center;
-            gap: 16px; margin-bottom: 20px;
-            background: #2c2c2e; border-radius: 13px; padding: 12px 16px;
-        }
+        label { display: block; font-size: 14px; font-weight: 700; color: #8b7355; text-transform: uppercase; margin-bottom: 7px; margin-left: 2px; }
+        input { width: 100%; padding: 15px 14px; border: 1px solid #c0b090; border-radius: 13px; font-size: 20px; outline: none; background: #fcfaf5; color: #4a3a2a; text-align: right; font-variant-numeric: tabular-nums; -webkit-appearance: none; }
+        input:focus { border-color: #8b7355; background: #f4ecd8; }
+        .unit { text-align: right; font-size: 12px; color: #a39580; margin-top: 5px; font-weight: 500; }
+        .delta-row { display: flex; align-items: center; justify-content: center; gap: 16px; margin-bottom: 20px; background: #dcd0b8; border-radius: 13px; padding: 12px 16px; }
         .delta-item { display: flex; flex-direction: column; align-items: center; gap: 3px; }
-        .delta-label { font-size: 12px; color: #636366; font-weight: 600; text-transform: uppercase; letter-spacing: 0.8px; }
-        .delta-val {
-            font-size: 18px; font-weight: 700;
-            color: #aeaeb2; font-variant-numeric: tabular-nums;
-        }
-        .delta-val.positive { color: #30d158; }
-        .delta-val.negative { color: #ff453a; }
-        .delta-sep { width: 1px; height: 36px; background: #38383a; }
-
-        /* Divider */
+        .delta-label { font-size: 12px; color: #8b7355; font-weight: 600; text-transform: uppercase; }
+        .delta-val { font-size: 18px; font-weight: 700; color: #4a3a2a; font-variant-numeric: tabular-nums; }
+        .delta-val.positive { color: #556b2f; }
+        .delta-val.negative { color: #a52a2a; }
+        .delta-sep { width: 1px; height: 36px; background: #c0b090; }
         .divider { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; }
-        .divider::before, .divider::after { content:''; flex:1; height:1px; background:#38383a; }
-        .divider-label { font-size: 13px; font-weight: 700; color: #48484a; letter-spacing: 1.5px; text-transform: uppercase; }
-
-        /* Results: griglia 2x2, ogni card = label a sx + valore a dx sulla stessa riga */
+        .divider::before, .divider::after { content:''; flex:1; height:1px; background:#c0b090; }
+        .divider-label { font-size: 13px; font-weight: 700; color: #a39580; letter-spacing: 1.5px; text-transform: uppercase; }
         .results-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 24px; }
-        .result-card {
-            background: #2c2c2e; border: 2px solid #38383a; border-radius: 16px;
-            padding: 16px 18px;
-            display: flex; align-items: center; justify-content: space-between;
-            transition: border-color 0.3s, background 0.3s;
-            min-height: 64px;
-        }
-        .result-card.has-value { border-color: #0a84ff; background: #0a1f35; }
-
-        .result-left { display: flex; flex-direction: column; gap: 3px; }
-        .result-label {
-            font-size: 18px; font-weight: 800; color: #636366; letter-spacing: 0.3px;
-        }
-        .result-card.has-value .result-label { color: #4db8ff; }
-        .result-unit { font-size: 11px; color: #48484a; font-weight: 500; }
-        .result-card.has-value .result-unit { color: #636366; }
-
-        .result-value {
-            font-size: 24px; font-weight: 700; color: #48484a;
-            font-variant-numeric: tabular-nums; text-align: right;
-        }
-        .result-card.has-value .result-value { color: #ffffff; }
-
-        /* Reset */
-        .btn-reset {
-            width: 100%; background: transparent; color: #ff453a; border: none;
-            padding: 14px; border-radius: 15px; font-size: 16px; font-weight: 600;
-            cursor: pointer; -webkit-tap-highlight-color: transparent;
-        }
+        .result-card { background: #dcd0b8; border: 1px solid #c0b090; border-radius: 16px; padding: 12px 14px; display: flex; flex-direction: column; gap: 8px; }
+        .result-card.has-value { border-color: #8b7355; background: #d0c0a8; }
+        .result-label { font-size: 16px; font-weight: 800; color: #a39580; }
+        .result-card.has-value .result-label { color: #5a4a35; }
+        .result-bottom { display: flex; align-items: baseline; justify-content: space-between; }
+        .result-unit { font-size: 11px; color: #a39580; }
+        .result-value { font-size: 22px; font-weight: 700; color: #a39580; text-align: right; flex: 1; }
+        .result-card.has-value .result-value { color: #4a3a2a; }
+        .btn-reset { width: 100%; background: transparent; color: #a52a2a; border: none; padding: 14px; border-radius: 15px; font-size: 16px; font-weight: 600; cursor: pointer; }
     </style>
 </head>
 <body>
 <div class="container">
     <h1>ALU Calculator</h1>
     <p class="subtitle">LME impact · Flat Rolled Products</p>
-
     <div class="inputs">
         <div class="input-group">
             <label>LME Base</label>
-            <input type="text" inputmode="decimal" id="lmeBase" placeholder="0,00"
-                   oninput="calcola()" onblur="formatBlur('lmeBase')">
+            <input type="text" inputmode="decimal" id="lmeBase" placeholder="0,00" oninput="calcola()" onblur="formatField(this)">
             <div class="unit">€/ton</div>
         </div>
         <div class="input-group">
             <label>LME New</label>
-            <input type="text" inputmode="decimal" id="lmeNew" placeholder="0,00"
-                   oninput="calcola()" onblur="formatBlur('lmeNew')">
+            <input type="text" inputmode="decimal" id="lmeNew" placeholder="0,00" oninput="calcola()" onblur="formatField(this)">
             <div class="unit">€/ton</div>
         </div>
     </div>
-
-    <!-- Delta: €/ton e % affiancati -->
     <div class="delta-row" id="deltaRow" style="display:none">
-        <div class="delta-item">
-            <span class="delta-label">Δ €/ton</span>
-            <span class="delta-val" id="deltaEur">—</span>
-        </div>
+        <div class="delta-item"><span class="delta-label">Δ €/ton</span><span class="delta-val" id="deltaEur">—</span></div>
         <div class="delta-sep"></div>
-        <div class="delta-item">
-            <span class="delta-label">Δ %</span>
-            <span class="delta-val" id="deltaPct">—</span>
-        </div>
+        <div class="delta-item"><span class="delta-label">Δ %</span><span class="delta-val" id="deltaPct">—</span></div>
     </div>
-
     <div class="divider"><span class="divider-label">Results</span></div>
-
     <div class="results-grid">
-        <div class="result-card" id="card-g15">
-            <div class="result-left">
-                <div class="result-label">G.15</div>
-                <div class="result-unit">€/m²</div>
-            </div>
-            <div class="result-value" id="val-g15">—</div>
-        </div>
-        <div class="result-card" id="card-g20">
-            <div class="result-left">
-                <div class="result-label">G.20</div>
-                <div class="result-unit">€/m²</div>
-            </div>
-            <div class="result-value" id="val-g20">—</div>
-        </div>
-        <div class="result-card" id="card-g30">
-            <div class="result-left">
-                <div class="result-label">G.30</div>
-                <div class="result-unit">€/m²</div>
-            </div>
-            <div class="result-value" id="val-g30">—</div>
-        </div>
-        <div class="result-card" id="card-g40">
-            <div class="result-left">
-                <div class="result-label">G.40</div>
-                <div class="result-unit">€/m²</div>
-            </div>
-            <div class="result-value" id="val-g40">—</div>
-        </div>
+        <div class="result-card" id="card-g15"><div class="result-label">G.15</div><div class="result-bottom"><span class="result-unit">€/m²</span><span class="result-value" id="val-g15">—</span></div></div>
+        <div class="result-card" id="card-g20"><div class="result-label">G.20</div><div class="result-bottom"><span class="result-unit">€/m²</span><span class="result-value" id="val-g20">—</span></div></div>
+        <div class="result-card" id="card-g30"><div class="result-label">G.30</div><div class="result-bottom"><span class="result-unit">€/m²</span><span class="result-value" id="val-g30">—</span></div></div>
+        <div class="result-card" id="card-g40"><div class="result-label">G.40</div><div class="result-bottom"><span class="result-unit">€/m²</span><span class="result-value" id="val-g40">—</span></div></div>
     </div>
-
     <button class="btn-reset" onclick="resetCampi()">Reset</button>
 </div>
 
@@ -176,30 +75,25 @@
     const FACTORS = { g15: 0.3761, g20: 0.4978, g30: 0.7414, g40: 1.0012 };
 
     function pIT(str) {
-        if (!str || !str.trim()) return NaN;
-        let s = str.trim();
-        if (s.includes('.') && s.includes(',')) s = s.replace(/\./g, '').replace(',', '.');
-        else if (s.includes(',')) s = s.replace(',', '.');
+        if (!str) return NaN;
+        // Rimuove tutto tranne numeri, virgola e punto, poi normalizza la virgola
+        let s = str.toString().replace(/\./g, '').replace(',', '.');
         return parseFloat(s);
     }
-    function fIT2(num, sign=false) {
-        if (isNaN(num)) return '—';
-        const prefix = sign && num > 0 ? '+' : '';
-        return prefix + num.toLocaleString('it-IT', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-    }
 
-    function formatBlur(id) {
-        const v = pIT(document.getElementById(id).value);
-        if (!isNaN(v)) document.getElementById(id).value = fIT2(v);
-    }
-
-    function setDeltaClass(el, val) {
-        el.className = 'delta-val' + (val > 0 ? ' positive' : val < 0 ? ' negative' : '');
+    function formatField(el) {
+        const val = pIT(el.value);
+        if (!isNaN(val)) {
+            // Formattazione manuale robusta
+            const parts = val.toFixed(2).split('.');
+            parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+            el.value = parts.join(',');
+        }
     }
 
     function calcola() {
         const base = pIT(document.getElementById('lmeBase').value);
-        const nw   = pIT(document.getElementById('lmeNew').value);
+        const nw = pIT(document.getElementById('lmeNew').value);
 
         if (isNaN(base) || isNaN(nw)) {
             ['g15','g20','g30','g40'].forEach(k => {
@@ -211,29 +105,26 @@
         }
 
         const delta = nw - base;
-        // % = (LME new / LME base) - 1
-        const pct   = base !== 0 ? (nw / base - 1) * 100 : NaN;
-
+        const pct = (nw / base - 1) * 100;
         document.getElementById('deltaRow').style.display = 'flex';
-
+        
         const dEur = document.getElementById('deltaEur');
-        dEur.textContent = fIT2(delta, true);
-        setDeltaClass(dEur, delta);
-
+        dEur.textContent = (delta > 0 ? '+' : '') + delta.toLocaleString('it-IT', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+        dEur.className = 'delta-val' + (delta > 0 ? ' positive' : delta < 0 ? ' negative' : '');
+        
         const dPct = document.getElementById('deltaPct');
-        dPct.textContent = fIT2(pct, true) + '%';
-        setDeltaClass(dPct, pct);
+        dPct.textContent = (pct > 0 ? '+' : '') + pct.toLocaleString('it-IT', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + '%';
+        dPct.className = 'delta-val' + (pct > 0 ? ' positive' : pct < 0 ? ' negative' : '');
 
         Object.entries(FACTORS).forEach(([k, factor]) => {
             const result = (delta / 1000) * factor;
-            document.getElementById('val-'+k).textContent = fIT2(result, false);
+            document.getElementById('val-'+k).textContent = result.toLocaleString('it-IT', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
             document.getElementById('card-'+k).classList.add('has-value');
         });
     }
 
     function resetCampi() {
-        document.getElementById('lmeBase').value = '';
-        document.getElementById('lmeNew').value  = '';
+        ['lmeBase', 'lmeNew'].forEach(id => document.getElementById(id).value = '');
         ['g15','g20','g30','g40'].forEach(k => {
             document.getElementById('val-'+k).textContent = '—';
             document.getElementById('card-'+k).classList.remove('has-value');
@@ -244,28 +135,20 @@
 
     document.getElementById('lmeBase').addEventListener('keydown', e => {
         if (e.key === 'Enter' || e.key === 'ArrowDown') {
-            e.preventDefault(); formatBlur('lmeBase');
+            e.preventDefault();
+            formatField(document.getElementById('lmeBase'));
             document.getElementById('lmeNew').focus();
-            document.getElementById('lmeNew').select();
         }
     });
+
     document.getElementById('lmeNew').addEventListener('keydown', e => {
         if (e.key === 'Enter' || e.key === 'ArrowUp') {
-            e.preventDefault(); formatBlur('lmeNew');
-            document.getElementById('lmeBase').focus();
-            document.getElementById('lmeBase').select();
+            e.preventDefault();
+            formatField(document.getElementById('lmeNew'));
+            if (e.key === 'ArrowUp') document.getElementById('lmeBase').focus();
+            else document.activeElement.blur();
         }
     });
-
-    document.getElementById('lmeBase').focus();
-</script>
-
-<script>
-if ('serviceWorker' in navigator) {
-    window.addEventListener('load', () => {
-        navigator.serviceWorker.register('/sw.js');
-    });
-}
 </script>
 </body>
 </html>

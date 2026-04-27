@@ -12,78 +12,36 @@
     <title>Discount Calculator</title>
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            background: #f4ecd8;
-            display: flex; justify-content: center;
-            padding: 20px; min-height: 100vh;
-        }
-        .container {
-            width: 100%; max-width: 500px;
-            background: #e8dec8; padding: 28px 20px;
-            border-radius: 24px; border: 1px solid #dcd0b8;
-            align-self: flex-start;
-        }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background: #f4ecd8; display: flex; justify-content: center; padding: 20px; min-height: 100vh; }
+        .container { width: 100%; max-width: 500px; background: #e8dec8; padding: 28px 20px; border-radius: 24px; border: 1px solid #dcd0b8; align-self: flex-start; }
         h1 { font-size: 26px; font-weight: 700; margin-bottom: 4px; text-align: center; color: #4a3a2a; }
         .formula-hint { text-align: center; font-size: 15px; color: #8b7355; margin-bottom: 20px; }
-        .status-bar {
-            text-align: center; font-size: 15px; font-weight: 500;
-            color: #8b7355; margin-bottom: 20px; min-height: 20px; transition: color 0.3s;
-        }
+        .status-bar { text-align: center; font-size: 15px; font-weight: 500; color: #8b7355; margin-bottom: 20px; min-height: 20px; transition: color 0.3s; }
         .status-bar.active { color: #556b2f; }
         .input-group { margin-bottom: 16px; }
         .label-row { display: flex; align-items: center; margin-bottom: 7px; margin-left: 2px; }
         label { font-size: 15px; font-weight: 700; color: #8b7355; text-transform: uppercase; letter-spacing: 0.5px; }
-
         .input-wrap { display: flex; align-items: center; gap: 8px; }
-
-        input {
-            flex: 1; padding: 14px;
-            border: 1px solid #c0b090; border-radius: 13px;
-            font-size: 20px; outline: none;
-            background: #fcfaf5; color: #4a3a2a;
-            min-width: 0; text-align: right; font-variant-numeric: tabular-nums;
-            transition: border-color 0.2s, background-color 0.2s;
-            -webkit-appearance: none;
-        }
+        input { flex: 1; padding: 14px; border: 1px solid #c0b090; border-radius: 13px; font-size: 20px; outline: none; background: #fcfaf5; color: #4a3a2a; min-width: 0; text-align: right; font-variant-numeric: tabular-nums; transition: border-color 0.2s, background-color 0.2s; -webkit-appearance: none; }
         input::placeholder { color: #b8a990; }
-        input:focus      { border-color: #8b7355; background: #f4ecd8; }
-        input.output     { border-color: #8b7355; background: #dcd0b8; color: #4a3a2a; font-weight: 700; }
-        input.flash      { background: #d0dec8 !important; border-color: #556b2f !important; transition: none; }
-        input.accepted   { border-color: #556b2f; background: #d0dec8; }
+        input:focus { border-color: #8b7355; background: #f4ecd8; }
+        input.output { border-color: #8b7355; background: #dcd0b8; color: #4a3a2a; font-weight: 700; }
+        input.flash { background: #d0dec8 !important; border-color: #556b2f !important; transition: none; }
+        input.accepted { border-color: #556b2f; background: #d0dec8; }
         input.disabled-alt { background: #e8dec8; color: #a39580; border-color: #dcd0b8; }
-
         .stepper { display: flex; flex-direction: column; gap: 3px; flex-shrink: 0; }
-        .step-btn {
-            width: 40px; height: 27px;
-            border: 1px solid #c0b090; border-radius: 8px;
-            background: #dcd0b8; cursor: pointer;
-            display: flex; align-items: center; justify-content: center;
-            font-size: 16px; color: #4a3a2a; font-weight: 600;
-            transition: all 0.15s; -webkit-tap-highlight-color: transparent; user-select: none;
-        }
+        .step-btn { width: 40px; height: 27px; border: 1px solid #c0b090; border-radius: 8px; background: #dcd0b8; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 16px; color: #4a3a2a; font-weight: 600; transition: all 0.15s; -webkit-tap-highlight-color: transparent; user-select: none; }
         .step-btn:active { background: #c0b090; transform: scale(0.93); }
-
         .sconto-block { margin-bottom: 16px; }
         .or-row { display: flex; align-items: center; gap: 12px; margin: 10px 0; }
         .or-row::before, .or-row::after { content: ''; flex: 1; height: 1px; background: #c0b090; }
         .or-label { font-size: 14px; font-weight: 700; color: #a39580; letter-spacing: 1px; }
-
         .divider { height: 1px; background: #dcd0b8; margin: 6px 0 18px; }
-
-        .btn {
-            width: 100%; background: #8b7355; color: #ffffff; border: none;
-            padding: 17px; border-radius: 15px; font-size: 18px; font-weight: 700;
-            cursor: pointer; margin-top: 10px; transition: all 0.15s;
-        }
-        .btn:active  { background: #5a4a35; transform: scale(0.98); }
+        .btn { width: 100%; background: #8b7355; color: #ffffff; border: none; padding: 17px; border-radius: 15px; font-size: 18px; font-weight: 700; cursor: pointer; margin-top: 10px; transition: all 0.15s; }
+        .btn:active { background: #5a4a35; transform: scale(0.98); }
         .btn:disabled { background: #dcd0b8; color: #a39580; cursor: not-allowed; transform: none; border: 1px solid #c0b090; }
-        .btn.ready   { box-shadow: 0 0 0 3px rgba(139,115,85,0.2); }
-        .btn-secondary {
-            width: 100%; background: transparent; color: #a52a2a; border: none;
-            padding: 14px; border-radius: 15px; font-size: 17px; font-weight: 600;
-            cursor: pointer; margin-top: 4px;
-        }
+        .btn.ready { box-shadow: 0 0 0 3px rgba(139,115,85,0.2); }
+        .btn-secondary { width: 100%; background: transparent; color: #a52a2a; border: none; padding: 14px; border-radius: 15px; font-size: 17px; font-weight: 600; cursor: pointer; margin-top: 4px; }
         .hint { font-size: 15px; color: #8b7355; text-align: center; margin-top: 14px; line-height: 1.6; }
     </style>
 </head>
@@ -92,7 +50,6 @@
     <h1>Discount Calculator</h1>
     <div class="formula-hint">Gross − Discount = Net</div>
     <div class="status-bar" id="statusBar">Enter two values and press Calculate</div>
-
     <div class="input-group">
         <div class="label-row"><label>Gross Price (€)</label></div>
         <div class="input-wrap">
@@ -103,9 +60,7 @@
             </div>
         </div>
     </div>
-
     <div class="divider"></div>
-
     <div class="sconto-block">
         <div class="input-group" style="margin-bottom:0">
             <div class="label-row"><label>Discount (€)</label></div>
@@ -129,9 +84,7 @@
             </div>
         </div>
     </div>
-
     <div class="divider" style="margin-top:18px"></div>
-
     <div class="input-group">
         <div class="label-row"><label>Net Price (€)</label></div>
         <div class="input-wrap">
@@ -142,12 +95,10 @@
             </div>
         </div>
     </div>
-
     <button class="btn" id="btnCalcola" onclick="calcola()" disabled>Calculate</button>
     <button class="btn-secondary" tabindex="-1" onclick="resetCampi()">Reset</button>
     <div class="hint" id="hint" style="display:none">Edit any value — the others update live</div>
 </div>
-
 <script>
 let fase2=false, inputGruppi=[], activeSconto=null;
 const NAV_IDS=['lordo','sconto_e','sconto_p','netto'];
@@ -163,9 +114,13 @@ function pIT(str){
     else if(s.includes(',')) s=s.replace(',','.');
     return parseFloat(s);
 }
-function fIT(num,dec=2){
+function fIT(num, dec=2){
     if(isNaN(num)) return '';
-    return num.toLocaleString('it-IT',{minimumFractionDigits:dec,maximumFractionDigits:dec});
+    return num.toLocaleString('it-IT', {
+        minimumFractionDigits: dec, 
+        maximumFractionDigits: dec,
+        useGrouping: true
+    });
 }
 function sf(id,n){ f(id).value=fIT(n); }
 function v(id){ return pIT(f(id).value); }
@@ -235,7 +190,7 @@ function goTo(idx){
 }
 
 NAV_IDS.forEach((id,idx)=>{
-    f(id).addEventListener('blur',()=>{const x=v(id);if(!isNaN(x))sf(id,x);updBtn();});
+    f(id).addEventListener('blur',()=>{const x=v(id);if(!isNaN(x))sf(id,x);updBtn();}); // Formattazione forzata
     f(id).addEventListener('input',()=>{
         if(id==='sconto_e') onScontoInput('e');
         else if(id==='sconto_p') onScontoInput('p');
@@ -328,14 +283,6 @@ function resetCampi(){
     f('lordo').focus();
 }
 f('lordo').focus();
-</script>
-
-<script>
-if ('serviceWorker' in navigator) {
-    window.addEventListener('load', () => {
-        navigator.serviceWorker.register('/sw.js');
-    });
-}
 </script>
 </body>
 </html>

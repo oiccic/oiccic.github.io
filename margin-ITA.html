@@ -12,80 +12,32 @@
     <title>Margin Calculator</title>
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            background: #f4ecd8;
-            display: flex; justify-content: center;
-            padding: 20px; min-height: 100vh;
-        }
-        .container {
-            width: 100%; max-width: 500px;
-            background: #e8dec8; padding: 28px 20px;
-            border-radius: 24px; border: 1px solid #dcd0b8;
-            align-self: flex-start;
-        }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background: #f4ecd8; display: flex; justify-content: center; padding: 20px; min-height: 100vh; }
+        .container { width: 100%; max-width: 500px; background: #e8dec8; padding: 28px 20px; border-radius: 24px; border: 1px solid #dcd0b8; align-self: flex-start; }
         h1 { font-size: 26px; font-weight: 700; margin-bottom: 8px; text-align: center; color: #4a3a2a; }
-        .status-bar {
-            text-align: center; font-size: 15px; font-weight: 500;
-            color: #8b7355; margin-bottom: 24px; min-height: 20px; transition: color 0.3s;
-        }
+        .status-bar { text-align: center; font-size: 15px; font-weight: 500; color: #8b7355; margin-bottom: 24px; min-height: 20px; transition: color 0.3s; }
         .status-bar.active { color: #556b2f; }
         .input-group { margin-bottom: 16px; }
         .label-row { display: flex; align-items: center; margin-bottom: 7px; margin-left: 2px; }
         label { font-size: 15px; font-weight: 700; color: #8b7355; text-transform: uppercase; letter-spacing: 0.5px; }
-
         .input-wrap { display: flex; align-items: center; gap: 8px; }
-
-        input {
-            flex: 1; padding: 15px 14px;
-            border: 1px solid #c0b090; border-radius: 13px;
-            font-size: 20px; outline: none;
-            background: #fcfaf5; color: #4a3a2a;
-            min-width: 0; text-align: right; font-variant-numeric: tabular-nums;
-            transition: border-color 0.2s, background-color 0.2s;
-            -webkit-appearance: none;
-        }
+        input { flex: 1; padding: 15px 14px; border: 1px solid #c0b090; border-radius: 13px; font-size: 20px; outline: none; background: #fcfaf5; color: #4a3a2a; min-width: 0; text-align: right; font-variant-numeric: tabular-nums; transition: border-color 0.2s, background-color 0.2s; -webkit-appearance: none; }
         input::placeholder { color: #b8a990; }
-        input:focus   { border-color: #8b7355; background: #f4ecd8; }
-        input.locked  { border-color: #b8860b; background: #e8d0a0; color: #5a4a2a; font-weight: 700; }
-        input.output  { border-color: #8b7355; background: #dcd0b8; color: #4a3a2a; font-weight: 700; }
-        input.flash   { background: #d0dec8 !important; border-color: #556b2f !important; transition: none; }
+        input:focus { border-color: #8b7355; background: #f4ecd8; }
+        input.locked { border-color: #b8860b; background: #e8d0a0; color: #5a4a2a; font-weight: 700; }
+        input.output { border-color: #8b7355; background: #dcd0b8; color: #4a3a2a; font-weight: 700; }
+        input.flash { background: #d0dec8 !important; border-color: #556b2f !important; transition: none; }
         input.accepted { border-color: #556b2f; background: #d0dec8; }
-
         .stepper { display: flex; flex-direction: column; gap: 3px; flex-shrink: 0; }
-        .step-btn {
-            width: 40px; height: 27px;
-            border: 1px solid #c0b090; border-radius: 8px;
-            background: #dcd0b8; cursor: pointer;
-            display: flex; align-items: center; justify-content: center;
-            font-size: 16px; color: #4a3a2a; font-weight: 600;
-            transition: all 0.15s; -webkit-tap-highlight-color: transparent; user-select: none;
-        }
+        .step-btn { width: 40px; height: 27px; border: 1px solid #c0b090; border-radius: 8px; background: #dcd0b8; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 16px; color: #4a3a2a; font-weight: 600; transition: all 0.15s; -webkit-tap-highlight-color: transparent; user-select: none; }
         .step-btn:active { background: #c0b090; transform: scale(0.93); }
-
-        .lock-btn {
-            flex-shrink: 0; width: 46px; height: 56px;
-            border: 1px solid #c0b090; border-radius: 13px;
-            background: #dcd0b8; cursor: pointer;
-            display: flex; align-items: center; justify-content: center;
-            font-size: 22px; transition: all 0.2s;
-            -webkit-tap-highlight-color: transparent; user-select: none;
-        }
+        .lock-btn { flex-shrink: 0; width: 46px; height: 56px; border: 1px solid #c0b090; border-radius: 13px; background: #dcd0b8; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 22px; transition: all 0.2s; -webkit-tap-highlight-color: transparent; user-select: none; }
         .lock-btn.locked { background: #b8860b; border-color: #b8860b; color: #fff; }
-
-        .btn {
-            width: 100%; background: #8b7355; color: #ffffff; border: none;
-            padding: 17px; border-radius: 15px; font-size: 18px; font-weight: 700;
-            cursor: pointer; margin-top: 10px; transition: all 0.15s;
-        }
-        .btn:active  { background: #5a4a35; transform: scale(0.98); }
+        .btn { width: 100%; background: #8b7355; color: #ffffff; border: none; padding: 17px; border-radius: 15px; font-size: 18px; font-weight: 700; cursor: pointer; margin-top: 10px; transition: all 0.15s; }
+        .btn:active { background: #5a4a35; transform: scale(0.98); }
         .btn:disabled { background: #dcd0b8; color: #a39580; cursor: not-allowed; transform: none; border: 1px solid #c0b090; }
-        .btn.ready   { box-shadow: 0 0 0 3px rgba(139,115,85,0.2); }
-        .btn-secondary {
-            width: 100%; background: transparent; color: #a52a2a; border: none;
-            padding: 14px; border-radius: 15px; font-size: 17px; font-weight: 600;
-            cursor: pointer; margin-top: 4px;
-        }
+        .btn.ready { box-shadow: 0 0 0 3px rgba(139,115,85,0.2); }
+        .btn-secondary { width: 100%; background: transparent; color: #a52a2a; border: none; padding: 14px; border-radius: 15px; font-size: 17px; font-weight: 600; cursor: pointer; margin-top: 4px; }
         .hint { font-size: 15px; color: #8b7355; text-align: center; margin-top: 14px; line-height: 1.6; }
         .hint b { color: #b8860b; font-weight: 700; }
     </style>
@@ -94,7 +46,6 @@
 <div class="container">
     <h1>Margin Calculator</h1>
     <div class="status-bar" id="statusBar">Enter two values and press Calculate</div>
-
     <div class="input-group">
         <div class="label-row"><label>Cost (€)</label></div>
         <div class="input-wrap">
@@ -106,7 +57,6 @@
             </div>
         </div>
     </div>
-
     <div class="input-group">
         <div class="label-row"><label>Price (€)</label></div>
         <div class="input-wrap">
@@ -118,7 +68,6 @@
             </div>
         </div>
     </div>
-
     <div class="input-group">
         <div class="label-row"><label>Margin (%)</label></div>
         <div class="input-wrap">
@@ -130,7 +79,6 @@
             </div>
         </div>
     </div>
-
     <button class="btn" id="btnCalcola" onclick="calcola()" disabled>Calculate</button>
     <button class="btn-secondary" tabindex="-1" onclick="resetCampi()">Reset</button>
     <div class="hint" id="hint" style="display:none"><b>🔒 Orange field = locked</b><br>Edit the other two — the third updates live</div>
@@ -157,10 +105,14 @@
         else if(s.includes(',')) s=s.replace(',','.');
         return parseFloat(s);
     }
-    function fIT(num,dec=2){
-        if(isNaN(num)) return '';
-        return num.toLocaleString('it-IT',{minimumFractionDigits:dec,maximumFractionDigits:dec});
-    }
+    function fIT(num, dec=2){
+    if(isNaN(num)) return '';
+    return num.toLocaleString('it-IT', {
+        minimumFractionDigits: dec, 
+        maximumFractionDigits: dec,
+        useGrouping: true
+    });
+}
     function sf(id,n){ f(id).value=fIT(n); }
 
     function updBtn(){
@@ -182,7 +134,8 @@
 
     function attachListeners(id, idx){
         f(id).addEventListener('blur',()=>{
-            const v=pIT(f(id).value); if(!isNaN(v)) sf(id,v);
+            const v=pIT(f(id).value); 
+            if(!isNaN(v)) sf(id,v); // Formattazione forzata su blur
             if(!fase2) updBtn();
         });
         f(id).addEventListener('input',()=>{ if(!fase2) updBtn(); else onInput(id); });
@@ -288,14 +241,6 @@
         goTo(0);
     }
     goTo(0);
-</script>
-
-<script>
-if ('serviceWorker' in navigator) {
-    window.addEventListener('load', () => {
-        navigator.serviceWorker.register('/sw.js');
-    });
-}
 </script>
 </body>
 </html>
