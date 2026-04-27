@@ -6,7 +6,7 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="Discounts">
-    <meta name="theme-color" content="#1c1c1e">
+    <meta name="theme-color" content="#f4ecd8">
     <link rel="manifest" href="manifest.json">
     <link rel="apple-touch-icon" href="apple-touch-icon.png">
     <title>Discount Calculator</title>
@@ -14,77 +14,77 @@
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            background: #000;
+            background: #f4ecd8;
             display: flex; justify-content: center;
             padding: 20px; min-height: 100vh;
         }
         .container {
             width: 100%; max-width: 500px;
-            background: #1c1c1e; padding: 28px 20px;
-            border-radius: 24px; box-shadow: 0 10px 40px rgba(0,0,0,0.6);
+            background: #e8dec8; padding: 28px 20px;
+            border-radius: 24px; border: 1px solid #dcd0b8;
             align-self: flex-start;
         }
-        h1 { font-size: 26px; font-weight: 700; margin-bottom: 4px; text-align: center; color: #ffffff; }
-        .formula-hint { text-align: center; font-size: 15px; color: #aeaeb2; margin-bottom: 20px; }
+        h1 { font-size: 26px; font-weight: 700; margin-bottom: 4px; text-align: center; color: #4a3a2a; }
+        .formula-hint { text-align: center; font-size: 15px; color: #8b7355; margin-bottom: 20px; }
         .status-bar {
             text-align: center; font-size: 15px; font-weight: 500;
-            color: #aeaeb2; margin-bottom: 20px; min-height: 20px; transition: color 0.3s;
+            color: #8b7355; margin-bottom: 20px; min-height: 20px; transition: color 0.3s;
         }
-        .status-bar.active { color: #30d158; }
+        .status-bar.active { color: #556b2f; }
         .input-group { margin-bottom: 16px; }
         .label-row { display: flex; align-items: center; margin-bottom: 7px; margin-left: 2px; }
-        label { font-size: 15px; font-weight: 700; color: #aeaeb2; text-transform: uppercase; letter-spacing: 0.5px; }
+        label { font-size: 15px; font-weight: 700; color: #8b7355; text-transform: uppercase; letter-spacing: 0.5px; }
 
         .input-wrap { display: flex; align-items: center; gap: 8px; }
 
         input {
             flex: 1; padding: 14px;
-            border: 2px solid #48484a; border-radius: 13px;
+            border: 1px solid #c0b090; border-radius: 13px;
             font-size: 20px; outline: none;
-            background: #2c2c2e; color: #ffffff;
+            background: #fcfaf5; color: #4a3a2a;
             min-width: 0; text-align: right; font-variant-numeric: tabular-nums;
             transition: border-color 0.2s, background-color 0.2s;
             -webkit-appearance: none;
         }
-        input::placeholder { color: #636366; }
-        input:focus      { border-color: #0a84ff; background: #1a2a3a; }
-        input.output     { border-color: #0a84ff; background: #0a1f35; color: #4db8ff; font-weight: 700; }
-        input.flash      { background: #0d3320 !important; border-color: #30d158 !important; transition: none; }
-        input.accepted   { border-color: #30d158; background: #0d3320; }
-        input.disabled-alt { background: #1c1c1e; color: #48484a; border-color: #2c2c2e; }
+        input::placeholder { color: #b8a990; }
+        input:focus      { border-color: #8b7355; background: #f4ecd8; }
+        input.output     { border-color: #8b7355; background: #dcd0b8; color: #4a3a2a; font-weight: 700; }
+        input.flash      { background: #d0dec8 !important; border-color: #556b2f !important; transition: none; }
+        input.accepted   { border-color: #556b2f; background: #d0dec8; }
+        input.disabled-alt { background: #e8dec8; color: #a39580; border-color: #dcd0b8; }
 
         .stepper { display: flex; flex-direction: column; gap: 3px; flex-shrink: 0; }
         .step-btn {
             width: 40px; height: 27px;
-            border: 2px solid #48484a; border-radius: 8px;
-            background: #2c2c2e; cursor: pointer;
+            border: 1px solid #c0b090; border-radius: 8px;
+            background: #dcd0b8; cursor: pointer;
             display: flex; align-items: center; justify-content: center;
-            font-size: 16px; color: #ffffff; font-weight: 600;
+            font-size: 16px; color: #4a3a2a; font-weight: 600;
             transition: all 0.15s; -webkit-tap-highlight-color: transparent; user-select: none;
         }
-        .step-btn:active { background: #3a3a3c; transform: scale(0.93); }
+        .step-btn:active { background: #c0b090; transform: scale(0.93); }
 
         .sconto-block { margin-bottom: 16px; }
         .or-row { display: flex; align-items: center; gap: 12px; margin: 10px 0; }
-        .or-row::before, .or-row::after { content: ''; flex: 1; height: 1px; background: #38383a; }
-        .or-label { font-size: 14px; font-weight: 700; color: #636366; letter-spacing: 1px; }
+        .or-row::before, .or-row::after { content: ''; flex: 1; height: 1px; background: #c0b090; }
+        .or-label { font-size: 14px; font-weight: 700; color: #a39580; letter-spacing: 1px; }
 
-        .divider { height: 1px; background: #2c2c2e; margin: 6px 0 18px; }
+        .divider { height: 1px; background: #dcd0b8; margin: 6px 0 18px; }
 
         .btn {
-            width: 100%; background: #0a84ff; color: #ffffff; border: none;
+            width: 100%; background: #8b7355; color: #ffffff; border: none;
             padding: 17px; border-radius: 15px; font-size: 18px; font-weight: 700;
             cursor: pointer; margin-top: 10px; transition: all 0.15s;
         }
-        .btn:active  { background: #0060c0; transform: scale(0.98); }
-        .btn:disabled { background: #2c2c2e; color: #636366; cursor: not-allowed; transform: none; border: 2px solid #38383a; }
-        .btn.ready   { box-shadow: 0 0 0 3px rgba(10,132,255,0.4); }
+        .btn:active  { background: #5a4a35; transform: scale(0.98); }
+        .btn:disabled { background: #dcd0b8; color: #a39580; cursor: not-allowed; transform: none; border: 1px solid #c0b090; }
+        .btn.ready   { box-shadow: 0 0 0 3px rgba(139,115,85,0.2); }
         .btn-secondary {
-            width: 100%; background: transparent; color: #ff453a; border: none;
+            width: 100%; background: transparent; color: #a52a2a; border: none;
             padding: 14px; border-radius: 15px; font-size: 17px; font-weight: 600;
             cursor: pointer; margin-top: 4px;
         }
-        .hint { font-size: 15px; color: #aeaeb2; text-align: center; margin-top: 14px; line-height: 1.6; }
+        .hint { font-size: 15px; color: #8b7355; text-align: center; margin-top: 14px; line-height: 1.6; }
     </style>
 </head>
 <body>
