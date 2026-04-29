@@ -1,4 +1,4 @@
-const CACHE_NAME = 'calcolatori-sepia-v2'; // INCREMENTA QUESTO NUMERO AD OGNI UPDATE
+const CACHE_NAME = 'calcolatori-sepia-v3'; // INCREMENTA QUESTO NUMERO AD OGNI UPDATE
 const FILES = [
     '/',
     '/index.html',
